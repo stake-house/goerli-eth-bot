@@ -1,0 +1,18 @@
+{
+  "name": "rocketpool-goerli-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/colfax23/rocketpool-goerli-bot",
+  "author": "Colfax Selby <colfax.selby@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0",
+    "fs": "^0.0.1-security",
+    "pako": "^2.0.3",
+    "web3": "^1.4.0"
+  },
+  "scripts": {
+    "start": "node src/main.js"
+  }
+}
