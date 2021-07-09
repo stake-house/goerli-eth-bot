@@ -35,7 +35,8 @@ _[image source](https://www.writebots.com/discord-bot-token/)_
 2) `cp .env.example .env` and fill out the required variables, including the token from above
 
 3) Implement any custom checks you want your bot to run in the `receiverIsEligible` function in `src/goerliBot.js`
-* if you implement custom checks, make sure to pass in `true` when calling `bot.commands.get('goerliBot').execute(message, args, 1, true);`
+* If you implement custom checks, make sure to pass in `true` when calling `bot.commands.get('goerliBot').execute(message, args, 1, true);`
+* The bot is currently configured to send 1 goerli eth, and if the address already has 1 it will not send
 
 4) Add discord user id's to the maintainers command if you would like to
 
