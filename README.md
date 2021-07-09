@@ -16,7 +16,7 @@
 
 ![image](https://user-images.githubusercontent.com/26490734/125041062-9edf0980-e098-11eb-9fc0-af391f06d48c.png)
 
-3) Get your bot's token and add it to the .env.example file
+3) Get your bot's token and add it to your .env file (details below)
 
 ![mspaint_2021-07-09_09-35-59](https://user-images.githubusercontent.com/26490734/125041473-16ad3400-e099-11eb-81cc-34c7c4dc9261.png)
 
@@ -28,28 +28,27 @@
 
 _[image source](https://www.writebots.com/discord-bot-token/)_
 
-### Bot
+#### Run the bot backend
 
-#### Setup
-* create `.env` file and fill in required variables (see `.env.example`)
-* make sure to add your discord bot token from above
+1) Clone this repo
 
-##### Custom Checks
-* Implement any necessary custom checks in the function `receiverIsEligible` and make sure `runCustomChecks` is true in your initial bot configuration if you want them applied
+2) `cp .env.example .env` and fill out the required variables, including the token from above
 
-## Running
+3) Implement any custom checks you want your bot to run in the `receiverIsEligible` function in `src/goerliBot.js`
+* if you implement custom checks, make sure to pass in `true` when calling `bot.commands.get('goerliBot').execute(message, args, 1, true);`
+
+4) Add discord user id's to the maintainers command if you would like to
+
+5) Run the bot with the following commands
 * `yarn install`
 * `yarn start > logfile.txt`
 
 ## Testing
 * `yarn install`
 * take a look at the "Test Zone" at the bottom of `src/goerliBot.js` and write the appropriate function calls for the tests you want to run
+    * you can bypass the actual bot here and test the underlying functions
 * `node src/goerliBot.js`
 
+## Contributions
 
-
-
-# to use
-.env file
-add maintainer ids to message
-implement any custom checks
+This started off as the EthStaker goerli bot, and we wanted to make it available for anyone to use.  Please let us know if you have any issues or suggestions for how to make things clearer.  PRs are always welcome too :)

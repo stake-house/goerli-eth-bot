@@ -72,12 +72,14 @@ bot.on('message', (message) => {
       }
       
       case 'mod': {
-        // Tag Butta and Colfax
+        // Tag the moderators
         console.log("mod called");
-        message.channel.send('Alerting the maintainers - <@discord-id> and <@discord-id> come check this out.');
+        // Uncomment below and add discord ids if you'd like to be tagged
+        // message.channel.send('Alerting the maintainers - <@discord-id> and <@discord-id> come check this out.');
         break;
       }
 
+      // For fun :)
       case 'dance': {
         console.log("dance called");
         message.channel.send('https://c.tenor.com/fJh-W38iA3oAAAAM/dance-kid.gif');
