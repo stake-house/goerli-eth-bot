@@ -54,13 +54,14 @@ exports.setCachedNonce = (nonce) => {
 
 // Sending the goerli ETH
 exports.sendGoerliEth = (message, faucetAddress, faucetKey, receiverAddress, amount, nonce, gasPrice) => {
+  console.log("In sendGoerliETH", faucetAddress, faucetKey, receiverAddress);
   var rawTransaction = {
     "from": faucetAddress, 
     "to": receiverAddress,
     "value": web3.utils.toHex(web3.utils.toWei(amount.toString(), "ether")),
     "gas": 21000,
     "gasPrice": gasPrice,
-    "chainId": 5, //goerli chain ID
+    "chainId": 97, //goerli chain ID
     "nonce": nonce,
   };
 
@@ -83,7 +84,7 @@ exports.sendGoerliEth = (message, faucetAddress, faucetKey, receiverAddress, amo
 // Validate faucet
 exports.faucetIsReady = async (faucetAddress, amountRequested) => {
   const faucetBalance = await this.getAddressBalance(faucetAddress);
-
+  console.log("Faucet Balance:",faucetBalance);
   const faucetBalanceNumber = Number(faucetBalance);
   const amountRequestedNumber = Number(amountRequested);
 

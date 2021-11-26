@@ -19,8 +19,10 @@ const runCustomEligibilityChecks = async (address) => {
 
 const receiverIsEligible = async (address, amountRequested, runCustomChecks)  => {
   const walletBalance = await utils.getAddressBalance(address);
-  const needsGoerliEth = walletBalance < amountRequested;
-
+  console.log(walletBalance);
+  //const needsGoerliEth = walletBalance < amountRequested;
+  const needsGoerliEth = true;
+  console.log(needsGoerliEth);
   if (runCustomChecks) {
     const passedCustomChecks = await runCustomEligibilityChecks(address);
 
@@ -66,7 +68,6 @@ const receiverEligible = await receiverIsEligible(address, amount, runCustomChec
   }
 
   const nonce = utils.getCachedNonce();
-
   utils.sendGoerliEth(message, process.env.FAUCET_ADDRESS, process.env.FAUCET_PRIVATE_KEY, address, amount, nonce, DEFAULT_GAS_PRICE);
   
   utils.incrementCachedNonce();
@@ -85,6 +86,6 @@ module.exports = {
 
 /* Test Zone */
 
-// utils.initializeCachedNonce();
-// runGoerliFaucet(null, "address goes here", .1, false);
-// runGoerliFaucet(null, "address goes here", 20, true);
+utils.initializeCachedNonce();
+ runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", 0.01, false);
+//runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", 20, false);
