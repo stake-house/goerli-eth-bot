@@ -82,10 +82,13 @@ module.exports = {
   execute(message, args, amount, runCustomChecks = false) {
     runGoerliFaucet(message, args[1], amount, runCustomChecks);
   }
-}
+} q
 
 /* Test Zone */
 
 utils.initializeCachedNonce();
- runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", 0.01, false);
+runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", 0.01, false);
+//hello
 //runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", 20, false);
+//Changed signedTransaction chainID from goerli 5 to 97 bsctestnet change back
+//Changed needsGoerli from check to True
