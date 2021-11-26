@@ -14,6 +14,16 @@ const INELIGIBLE_CUSTOM_CHECKS_MESSAGE = " is ineligible to receive goerli eth. 
 // Implement any custom eligibility requirements here
 const runCustomEligibilityChecks = async (address) => {
   // implement custom checks here
+
+  //check if address has received 66 goeth today already
+    //return false
+  //check if address has received 330 this week already
+    //return false
+  //check if address requested within 48 hours
+    //check if address deposited 32 eth to deposit address
+      //! return false
+  
+
   return true;
 }
 
@@ -82,7 +92,7 @@ module.exports = {
   execute(message, args, amount, runCustomChecks = false) {
     runGoerliFaucet(message, args[1], amount, runCustomChecks);
   }
-} q
+} 
 
 /* Test Zone */
 
