@@ -47,7 +47,7 @@ const runGoerliFaucet = async (message, address, amount, runCustomChecks) => {
     return;
   }
 
-const receiverEligible = await receiverIsEligible(address, amount, runCustomChecks);
+  const receiverEligible = await receiverIsEligible(address, amount, runCustomChecks);
   if (!receiverEligible) {
     const m = runCustomChecks ? address + INELIGIBLE_CUSTOM_CHECKS_MESSAGE
       : address + INELIGIBLE_NO_CUSTOM_CHECKS_MESSAGE;
@@ -82,12 +82,12 @@ module.exports = {
   execute(message, args, amount, runCustomChecks = false) {
     runGoerliFaucet(message, args[1], amount, runCustomChecks);
   }
-} q
+} 
 
 /* Test Zone */
 
 utils.initializeCachedNonce();
-runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", 0.01, false);
+//runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", 0.000001, false);
 //hello
 //runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", 20, false);
 //Changed signedTransaction chainID from goerli 5 to 97 bsctestnet change back

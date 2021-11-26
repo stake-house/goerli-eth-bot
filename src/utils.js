@@ -61,7 +61,7 @@ exports.sendGoerliEth = (message, faucetAddress, faucetKey, receiverAddress, amo
     "value": web3.utils.toHex(web3.utils.toWei(amount.toString(), "ether")),
     "gas": 21000,
     "gasPrice": gasPrice,
-    "chainId": 97, //goerli chain ID
+    "chainId": 5, //goerli chain ID
     "nonce": nonce,
   };
 
