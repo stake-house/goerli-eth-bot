@@ -135,7 +135,7 @@ modules.export = {
 async function checkAddressExists(address){
     const select = "select * from depositor where address = '$1';";
     const value = [address]
-    const result = pool.query(select.value);
+    const result = pool.query(select, value);
     return result.rows;
 
 }
