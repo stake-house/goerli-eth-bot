@@ -3,14 +3,14 @@
 //Depositor.findAll();*
 const {API} = require('./api.js');
 const { Pool } = require('pg');
-const pool = new Pool({
+let pool = new Pool({
     user: 'hamzaasaad',
     host: 'localhost',
     database: 'hamzaasaad',
     password: null,
     port: 5431,
   })
-pool.connect()
+pool = pool.connect()
 const createTable = `create table depositor(
     address VARCHAR,
     norequests INT,
