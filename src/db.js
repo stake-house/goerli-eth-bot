@@ -13,11 +13,14 @@ const pool = new Pool({
 pool.connect()
 const createTable = `create table depositor(
     address VARCHAR,
+    norequests INT,
     dailyCount INT,
     weeklyCount INT,
+    firstrequesttime TIMESTAMP WITHOUT TIME ZONE,
     dailyTime TIMESTAMP WITHOUT TIME ZONE,
-    weeklyTime TIMESTAMP WITHOUT TIME ZONE
-
+    weeklyTime TIMESTAMP WITHOUT TIME ZONE,
+    validatedtx VARCHAR,
+    unaccountedtx VARCHAR
 )`
 
 //pool.query(createTable);
