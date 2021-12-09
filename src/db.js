@@ -21,15 +21,15 @@ const createTable = `create table depositor(
     weeklyTime TIMESTAMP WITHOUT TIME ZONE,
     validatedtx VARCHAR,
     unaccountedtx VARCHAR
-)`
+);`
 
 //pool.query(createTable);
 
 const init = async function(){
 const now = new Date()
-const insert = "INSERT INTO depositor (address,norequests,dailyCount,weeklyCount,firstrequesttime,dailyTime,weeklyTime,validatedtx,unaccountedtx) VALUES ('$1',$2,$3,$4,'$5','$6','$7',$8,$9)";
+const insert = "INSERT INTO depositor (address,norequests,dailyCount,weeklyCount,firstrequesttime,dailyTime,weeklyTime,validatedtx,unaccountedtx) VALUES ('$1',$2,$3,$4,'$5','$6','$7',$8,$9);";
 //const insertVals = ['0x123',33,330,now,now]
-const text = 'select dailytime from depositor where address= $1';
+const text = 'select dailytime from depositor where address= $1;';
 const values = ['0x123']
 
 const result = await pool.query(text,values);
@@ -177,7 +177,7 @@ async function resetDailyCount(address, row){
 }
 
 async function checkWeeklyLimit(address){
-    const select = 'select weeklycount from depositor where address= $1'
+    const select = 'select weeklycount from depositor where address= $1;'
     const values = [address]
     const result = await pool.query(select,values);
     if (resetWeeklyCount(address, result.rows[0])){
@@ -191,7 +191,7 @@ async function resetWeeklyCount(address, row){
     const weeklytime = row.weeklytime;
     if ((Math.floor(now.getTime()/1000 - Math.floor(weeklytime.getTime()/1000))) > 604800){
         //update
-        const update = 'update depositor set weeklycount=0,weeklytime=$1 where address= $2'
+        const update = "update depositor set weeklycount=0,weeklytime='$1' where address= '$2';"
         const values = [now,address]
         await pool.query(update,values);
         return true; //weekly limit has been reset
@@ -204,7 +204,7 @@ async function resetNoRequests(address, row){
     const firstrequesttime = row.firstrequesttime;
     if ((Math.floor(now.getTime()/1000 - Math.floor(firstrequesttime.getTime()/1000))) > 172800){
         //update
-        const update = 'update depositor set norequests=0,firstrequesttime=$1 where address= $2'
+        const update = "update depositor set norequests=0,firstrequesttime='$1' where address= '$2';"
         const values = [now,address]
         await pool.query(update,values);
         return true; //daily limit has been reset
@@ -216,20 +216,20 @@ async function updateCounts(addressDetails,topUpAmount){
     var newDailyCount = addressDetails.dailycount + topUpAmount;
     var newWeeklyCount = addressDetails.weeklycount + topUpAmount;
     
-    const update = 'update depositor set dailycount= $1,weeklycount= $2 where address= $3';
+    const update = "update depositor set dailycount= $1,weeklycount= $2 where address= '$3';";
     const values = [newDailyCount,newWeeklyCount, addressDetails.address];
     await pool.query(update,values);
 
 }
 async function updateValidatedTx(addressDetails,newValidatedTx){
-    const update = 'update depositor set validatedtx= $1 where address= $2';
+    const update = "update depositor set validatedtx= '$1' where address= '$2';";
     const values = [newValidatedTx, addressDetails.address]
     await pool.query(update,values);
 }
 
 async function updateUnaccountedTx(addressDetails, newAmount){
     var newUnaccountedTx = addressDetails.unaccountedtx + newAmount;
-    const update = 'update depositor set unaccountedtx= $1 where address= $2';
+    const update = "update depositor set unaccountedtx= '$1' where address= '$2';";
     const values = [newUnaccountedTx, addressDetails.address]
     await pool.query(update,values);
 }
