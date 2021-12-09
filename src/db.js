@@ -29,7 +29,7 @@ const init = async function(){
 const now = new Date()
 const insert = "INSERT INTO depositor (address,norequests,dailyCount,weeklyCount,firstrequesttime,dailyTime,weeklyTime,validatedtx,unaccountedtx) VALUES ('$1',$2,$3,$4,'$5','$6','$7',$8,$9);";
 //const insertVals = ['0x123',33,330,now,now]
-const text = 'select dailytime from depositor where address= $1;';
+const text = "select dailytime from depositor where address= '$1';";
 const values = ['0x123']
 
 const result = await pool.query(text,values);
@@ -133,7 +133,7 @@ modules.export = {
 }
 
 async function checkAddressExists(address){
-    const select = 'select * from depositor where address = $1';
+    const select = "select * from depositor where address = '$1';";
     const value = [address]
     const result = pool.query(select.value);
     return result.rows;
@@ -150,7 +150,7 @@ async function setDepositor(address){
 
 async function checkDailyLimit(address){
     //If daily count exists and 24hours between now and daily time has passed reset to daily count to 0 and daily time to now
-    const select = 'select dailycount from depositor where address= $1'
+    const select = "select dailycount from depositor where address= '$1';"
     const values = [address]
     const result = await pool.query(select,values);
     //check time here
@@ -166,18 +166,16 @@ async function resetDailyCount(address, row){
     const dailytime = row.dailytime;
     if ((Math.floor(now.getTime()/1000 - Math.floor(dailytime.getTime()/1000))) > 86400){
         //update
-        const update = 'update depositor set dailycount=0,dailytime=$1 where address= $2'
+        const update = "update depositor set dailycount=0,dailytime='$1' where address= '$2';"
         const values = [now,address]
         await pool.query(update,values);
         return true; //daily limit has been reset
     }
     return false;
-    
-
 }
 
 async function checkWeeklyLimit(address){
-    const select = 'select weeklycount from depositor where address= $1;'
+    const select = "select weeklycount from depositor where address= '$1';"
     const values = [address]
     const result = await pool.query(select,values);
     if (resetWeeklyCount(address, result.rows[0])){
