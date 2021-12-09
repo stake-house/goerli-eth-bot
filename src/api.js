@@ -2,21 +2,25 @@ const axios = require('axios');
 const rateLimit = require('axios-rate-limit');
 require('dotenv').config();
 const { ETHERSCAN_API_KEY, ETHERSCAN_API_URL, FAUCET_ADDRESS } = process.env;
-console.log(ETHERSCAN_API_KEY,ETHERSCAN_API_URL);
-
+// console.log(ETHERSCAN_API_KEY,ETHERSCAN_API_URL);
 
 const getBlockNumber = async function(time) {
-    const request = await rateLimit(axios.create(), {maxRequests: 5, perMillisecondss: 1000, maxRPS: 1})
-    const url = `${ETHERSCAN_API_URL}?module=block&action=getblocknobytime&timestamp=${time}&closest=before&apikey=${ETHERSCAN_API_KEY}`
+    const request = await rateLimit(axios.create(), {maxRequests: 5, perMillisecondss: 1000, maxRPS: 1});
+    const url = `${ETHERSCAN_API_URL}?module=block&action=getblocknobytime&timestamp=${time}&closest=before&apikey=${ETHERSCAN_API_KEY}`;
     return (await (request.get(url))).data.result;
    
 }
 const getTransactions = async function (address, fromBlock) {
-    const request = await rateLimit(axios.create(), {maxRequests: 5, perMillisecondss: 1000, maxRPS: 1})
-    const url = `${ETHERSCAN_API_URL}?module=account&action=txlist&address=${address}&startblock=${fromBlock}&endblock=latest&sort=desc&apikey=${ETHERSCAN_API_KEY}`
+    const request = await rateLimit(axios.create(), {maxRequests: 5, perMillisecondss: 1000, maxRPS: 1});
+    const url = `${ETHERSCAN_API_URL}?module=account&action=txlist&address=${address}&startblock=${fromBlock}&endblock=latest&sort=desc&apikey=${ETHERSCAN_API_KEY}`;
     return (await request.get(url)).data.result;
 }
 
+const getBalance = async function (address){
+    const request = await rateLimit(axios.create(), {maxRequests: 5, perMillisecondss: 1000, maxRPS: 1});
+    const url = `${ETHERSCAN_API_URL}?module=account&action=balance&address=${address}&tag=latest&apikey=${ETHERSCAN_API_KEY}`;
+    return (await request.get(url)).data.result;
+}
 
 modules.export = {
     checkDeposit: async function(address) {
