@@ -27,7 +27,7 @@ const createTable = `create table depositor(
 
 const init = async function(){
 const now = new Date()
-const insert = "INSERT INTO depositor (address,norequests,dailyCount,weeklyCount,firstrequesttime,dailyTime,weeklyTime,validatedtx,unaccountedtx) VALUES ('$1',$2,$3,$4,'$5','$6','$7',$8,$9);";
+const insert = "INSERT INTO depositor (address,norequests,dailyCount,weeklyCount,firstrequesttime,dailyTime,weeklyTime,validatedtx,unaccountedtx) VALUES ('$1',$2,$3,$4,'$5','$6','$7','$8','$9');";
 //const insertVals = ['0x123',33,330,now,now]
 const text = "select dailytime from depositor where address= '$1';";
 const values = ['0x123']
