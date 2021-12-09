@@ -10,7 +10,7 @@ let pool = new Pool({
     password: null,
     port: 5431,
   })
-pool = pool.connect()
+pool = await pool.connect()
 const createTable = `create table depositor(
     address VARCHAR,
     norequests INT,
