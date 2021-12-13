@@ -33,7 +33,7 @@ module.exports = {
         var depositedTxArray = []
         //const sendAddress = "0x49a00b366cf5de47304a9a28bfb2956e29de3228"
         const tx = await getTransactions(address, fromBlock);
-        console.log(tx);
+
         if (tx) {
             for (count = 0; count < tx.length; count++){
                 //faucet address shoudld be = 0x00000000219ab540356cBB839Cbe05303d7705Fa

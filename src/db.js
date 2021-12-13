@@ -174,28 +174,6 @@ async function updateCounts(addressDetails,topUpAmount){
     await pool.query(update,values);
 
 }
-async function updateValidatedTx(addressDetails,newValidatedTx){
-    //console.log(addressDetails, newValidatedTx);
-    const update = 'update depositortest set validatedtx=$1 where address=$2 returning address;';
-    const values = [newValidatedTx, addressDetails.address]
-    const result = await pool.query(update,values);
-    //console.log(result);
-}
-
-async function updateUnaccountedTx(addressDetails, newTx, newAmount){
-    var newUnaccountedAmount = addressDetails.unaccountedamount + newAmount;
-    const update = 'update depositortest set unaccountedamount= $1, unaccountedtx= $2  where address=$3';
-    const values = [newUnaccountedTx,newTx, addressDetails.address]
-    const result = await pool.query(update,values);
-    //console.log(result);
-
-}
-
-async function objectRowUpdate(addressDetails){
-    const update = 'update depositortest set validatedtx= $1,unaccountedamount= $2, unaccountedtx= $3 where address=$4';
-    const values = [addressDetails.validatedtx, addressDetails.unaccountedamount, addressDetails.unaccountedtx, addressDetails.address]
-    const result = await pool.query(update, values);
-}
 
 async function getUnvalidatedTx(depositedTx, lastValidatedTx){
     let validatedTx = {};
@@ -212,89 +190,75 @@ async function getUnvalidatedTx(depositedTx, lastValidatedTx){
     }
   }
   
-  async function validateTransaction(addressDetails,topUpAmount){   // make a column for unaccountedAmount and timestamp of last transaction in db
+  async function objectRowUpdate(addressDetails){
+      const update = 'update depositortest set validatedtx= $1,unaccountedamount= $2, unaccountedtx= $3 where address=$4';
+      const values = [addressDetails.validatedtx, addressDetails.unaccountedamount, addressDetails.unaccountedtx, addressDetails.address]
+      const result = await pool.query(update, values);
+  }
+  
+  async function validateTransaction(addressDetails, topUpAmount){   // make a column for unaccountedAmount and timestamp of last transaction in db
                                                         // store timestamp in unix format
+        console.log('Inside validateTransaction...');
       let lastValidatedTx = addressDetails.validatedtx
-      let depositedTx = getUnvalidatedTx(API.checkDeposit(addressDetails), lastValidatedTx)
+      let depositedTx = getUnvalidatedTx(await checkDeposit(addressDetails.address), lastValidatedTx)
       let depositComplete = false
       if (depositedTx.length){
         if (lastValidatedTx){
-          if (depositedTx.length === 1){
-            if (depositedTx[i].amount == depositAmount && depositedTx[i].hash != lastValidatedTx){
-              addressDetails.validatedtx = depositedTx[i].hash
-              addressDetails.weeklycount += topUpAmount
-              addressDetails.dailycount += topUpAmount
-              await updateValidatedTx(addressDetails, depositedTx[i].hash);
-              await updateCounts(addressDetails, topUpAmount);
-              return true
-            }else if (Number(depositedTx[i].amount) < Number(depositAmount) && depositedTx[i].hash != lastValidatedTx){
-              addressDetails.unaccountedamount +=  depositedTx[i].amount
-              await updateUnaccountedTx(addressDetails,depositedTx[i].hash, depositedTx[i].amount);
-            }else if (Number(depositedTx[i].amount) > Number(depositAmount) && depositedTx[i].hash != lastValidatedTx){
-              addressDetails.unaccountedamount += (Number(depositedTx[i].amount) - Number(depositAmount))
-              await updateUnaccountedTx(addressDetails, depositedTx[i].hash, addressDetails.unaccountedamount + (Number(depositedTx[i].amount) - Number(depositAmount)));
-          }else{
-            for (let i; i < depositedTx.length; i++){
+          for (let i; i < depositedTx.length; i++){
               if (depositedTx[i].amount == depositAmount && depositedTx[i].hash != lastValidatedTx){
               addressDetails.validatedtx = depositedTx[i].hash
               addressDetails.weeklycount += topUpAmount
               addressDetails.dailycount += topUpAmount
-              await updateValidatedTx(addressDetails, depositedTx[i].hash);
-              await updateCounts(addressDetails, topUpAmount);
+              await objectRowUpdate(addressDetails);
               depositComplete = true
             }else if (Number(depositedTx[i].amount) < Number(depositAmount)){
               addressDetails.unaccountedamount +=  depositedTx[i].amount
-              await updateUnaccountedTx(addressDetails,depositedTx[i].hash, depositedTx[i].amount);
+              await objectRowUpdate(addressDetails);
             }else if (Number(depositedTx[i].amount) > Number(depositAmount)){
               addressDetails.unaccountedamount += (Number(depositedTx[i].amount) - Number(depositAmount))
-              await updateUnaccountedTx(addressDetails, depositedTx[i].hash, addressDetails.unaccountedamount + (Number(depositedTx[i].amount) - Number(depositAmount)));
+              await objectRowUpdate(addressDetails);
             }
-          }}}
         else{
-        if (depositedTx.length === 1){
-            if (depositedTx[i].amount == depositAmount && depositedTx[i].hash != lastValidatedTx){
-              addressDetails.validatedtx = depositedTx[i].hash
-              addressDetails.weeklycount += topUpAmount
-              addressDetails.dailycount += topUpAmount
-              await updateValidatedTx(addressDetails, depositedTx[i].hash);
-              await updateCounts(addressDetails, topUpAmount);
-              return true
-            }else if (Number(depositedTx[i].amount) < Number(depositAmount) && depositedTx[i].hash != lastValidatedTx){
-              addressDetails.unaccountedamount +=  depositedTx[i].amount
-              await updateUnaccountedTx(addressDetails,depositedTx[i].hash, depositedTx[i].amount);
-            }else if (Number(depositedTx[i].amount) > Number(depositAmount) && depositedTx[i].hash != lastValidatedTx){
-              addressDetails.unaccountedamount += (Number(depositedTx[i].amount) - Number(depositAmount))
-              await updateUnaccountedTx(addressDetails, depositedTx[i].hash, addressDetails.unaccountedamount + (Number(depositedTx[i].amount) - Number(depositAmount)));
-          }else{
-            for (let i; i < depositedTx.length; i++){
+          for (let i; i < depositedTx.length; i++){
               if (depositedTx[i].amount == depositAmount && depositedTx[i].hash != lastValidatedTx){
               addressDetails.validatedtx = depositedTx[i].hash
               addressDetails.weeklycount += topUpAmount
               addressDetails.dailycount += topUpAmount
-              await updateValidatedTx(addressDetails, depositedTx[i].hash);
-              await updateCounts(addressDetails, topUpAmount);
+              await objectRowUpdate(addressDetails);
               depositComplete = true
             }else if (Number(depositedTx[i].amount) < Number(depositAmount)){
               addressDetails.unaccountedamount +=  depositedTx[i].amount
-              await updateUnaccountedTx(addressDetails,depositedTx[i].hash, depositedTx[i].amount);
+              await objectRowUpdate(addressDetails);
             }else if (Number(depositedTx[i].amount) > Number(depositAmount)){
-              addressDetails.unaccountedamount += (Number(depositedTx[i].amount) - Number(depositAmount))
-              await updateUnaccountedTx(addressDetails, depositedTx[i].hash, addressDetails.unaccountedamount + (Number(depositedTx[i].amount) - Number(depositAmount)));
+              addressDetails.unaccountedamount += (Number(depositedTx[i].amount) - Number(depositAmount));
+              await objectRowUpdate(addressDetails);
             }
-            if (addressDetails.unaccountedAmount >= Number(depositAmount) && !depositComplete){
-              await updateUnaccountedTx();
-              //update time in db
-              await updateValidatedTx(addressDetails.unaccountedamount);
-              depositComplete = true
-            return depositComplete
+        if (addressDetails.unaccountedAmount >= Number(depositAmount) && !depositComplete){
+          await objectRowUpdate(addressDetails);
+          depositComplete = true
+        return depositComplete
       }else{
-        return false
+        return false;
+      }}}
+          }
+        }
+    }
+  }
+     
+/*
+async function updateValidatedTx(addressDetails,newValidatedTx){
+    //console.log(addressDetails, newValidatedTx);
+    const update = 'update depositortest set validatedtx=$1 where address=$2 returning address;';
+    const values = [newValidatedTx, addressDetails.address]
+    const result = await pool.query(update,values);
+    //console.log(result);
+}
 
-//async function deleteAddressAfterWeek(){}
-//validated transaction count conditions
-//if it is in list confirm with next transaction hash 
-// if it is the last elem do not confirm transaction
-// if it is not in the list use the first index
+async function updateUnaccountedTx(addressDetails, newTx, newAmount){
+    var newUnaccountedAmount = addressDetails.unaccountedamount + newAmount;
+    const update = 'update depositortest set unaccountedamount= $1, unaccountedtx= $2  where address=$3';
+    const values = [newUnaccountedTx,newTx, addressDetails.address]
+    const result = await pool.query(update,values);
+    //console.log(result);
 
-
-         
+}*/
