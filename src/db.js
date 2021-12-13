@@ -1,7 +1,7 @@
 
-//var Depositor = require('../db/index').depositor;
-//Depositor.findAll();*
-const {API} = require('./api.js');
+//var depositortest = require('../db/index').depositortest;
+//depositortest.findAll();*
+const { checkDeposit } = require('./api.js');
 const { Pool } = require('pg');
 let pool = new Pool({
     user: 'hamzaasaad',
@@ -10,227 +10,246 @@ let pool = new Pool({
     password: null,
     port: 5431,
   })
-pool = await pool.connect()
-const createTable = `create table depositor(
+pool.connect();
+
+pool.query('SELECT NOW()', (err, res) => {
+    if(err){
+        console.log('Database connection failed',err);
+    }
+    else {
+        console.log('Database connected!');
+    }
+  });
+
+const createTable = `create table depositortest(
     address VARCHAR,
     norequests INT,
     dailyCount INT,
     weeklyCount INT,
     firstrequesttime TIMESTAMP WITHOUT TIME ZONE,
     dailyTime TIMESTAMP WITHOUT TIME ZONE,
-    weeklyTime TIMESTAMP WITHOUT TIME ZONE,
-    validatedtx VARCHAR,
-    unaccountedtx VARCHAR
-);`
+    weeklyTime TIMESTAMP WITHOUT TIME ZONE
 
-//pool.query(createTable);
+)`
 
-const init = async function(){
-const now = new Date()
-const insert = "INSERT INTO depositor (address,norequests,dailyCount,weeklyCount,firstrequesttime,dailyTime,weeklyTime,validatedtx,unaccountedtx) VALUES ('$1',$2,$3,$4,'$5','$6','$7','$8','$9');";
-//const insertVals = ['0x123',33,330,now,now]
-const text = "select dailytime from depositor where address= '$1';";
-const values = ['0x123']
-
-const result = await pool.query(text,values);
-var time = (result.rows[0]).dailytime;
-//console.log(time.UTC());
-var dif = Math.floor(now.getTime()/1000) - Math.floor(time.getTime()/1000);
-console.log(dif);
-if (dif > 86400) {
-    console.log('passed');
-}
-else{
-    console.log('not passed');
-}
-
-//const tableTime = sqlToJsDate();
-//console.log(tableTime);
-
-}
-init();
+const depositAmount = "100000000000000"; //should be 32000000000000000000
+const dailyLimit = 0.002;
+const weeklyLimit = 0.004;
 
 
-modules.export = {
-    confirmTransaction: async function(address){
-        var addressDetails = await checkAddressExists(address);
-        if (!addressDetails){
-            setDepositor(address);
-            //check amount topUp
-            //add to weeklycount dailycount and norequest
-            //confirmed
+
+module.exports = {
+    confirmTransaction: async function(address, topUpAmount){
+        //add try catch
+
+        var addressDetails = (await checkAddressExists(address))[0];
+        //console.log("Check account exists address details:",addressDetails);
+        //Assumes addressDetails will always be an array
+        if (!addressDetails.length){
+            const addressDetails = await setDepositor(address);
+            await updateCounts(addressDetails, topUpAmount);
             return true
         }
-        addressDetails = addressDetails[0];
         //refresh daily limit and weekly limit 
         //check daily limit and weekly limit
         //If either are reached reject transaction
-        if (!checkDailyLimit(address)){
+        if (!(await checkDailyLimit(addressDetails))){
             return false;
         }
-        if (!checkWeeklyLimit(address)){
+        if (!(await checkWeeklyLimit(addressDetails))){
             return false;
         }
         //refresh norequests
-        await resetNoRequests(address, addressDetails);
-        if (addressDetails.norequests === 0){
-            //check amount topUp
-            //add to weeklycount dailycount and norequest
-            //confirmed
+        const norequests = await resetNoRequests(addressDetails);
+        if (norequests === 0){
+            await updateCounts(addressDetails, topUpAmount);
             return true
         } 
-        var latestAddressDetails = await checkAddressExists(address);
-        latestAddressDetails = latestAddressDetails[0];
+        addressDetails = (await checkAddressExists(address))[0];
         //noRequests > 1 now we have to validate that the user has sent 32 eth to the wallet
-        let depositedTx = await API.checkDeposit(address);
-        if (depositedTx){
+        let depositedTx = await checkDeposit(address);
+        console.log('DepositedTx', depositedTx);
+        if (depositedTx.length){
             const lastValidTx = addressDetails.validatedtx;
             const unaccountedTx = addressDetails.unaccountedtx;
-            var flag = false;
             var depositedTxHashes = []
-            for(let i = 0; i < depositedTx.length; i++){
-                if (depositedTx[i].hash === validatedTx){
-                    flag = true
-                    if (depositedTx[i] !==  depositedTx.length -1){
-                        if (depositedTx[i].amount === "32000000000000000000"){
-                            //confirmTx
-                            //check amount topUp
-                            //add weeklycount dailycount
-                            //add to validatedTx
-                        } else if (Number(depositedTx[i].amount) < 32000000000000000000){
-                            unaccountedTx += Number(depositedTx[i].amount);
-                            if (unaccountedTx === 32000000000000000000) {
-                                //confirmTx
-                                //check amount topUp
-                                //add weeklycount dailycount
-                                //add to validatedTx
-                            } else{
-                                //update unaccounted for Tx
-                                return false;
-                            }
-                        }
-                        //greater than 32000000000?
-                        
-
-                    }
-                    else{
-                        //no new Tx reject transaction
-                        return false;
-                    }
-                }
-            }
-            if (!flag){
-                //confirmTx
-                //check amount topUp
-                //add weeklycount dailycount
-                //add to validatedTx
-            }
-        }
-        else{
-            return false
-        }
+            var txSum = 0;
+            var savedHash = undefined;
+            console.log('Returning false inside validation check.');
+            return false;
+    }
     },
 }
 
 async function checkAddressExists(address){
-    const select = "select * from depositor where address = '$1';";
+    const select = 'select * from depositortest where address = $1';
     const value = [address]
-    const result = pool.query(select, value);
+    const result = await pool.query(select,value);
     return result.rows;
 
 }
 
 async function setDepositor(address){
     const now = new Date();
-    //const insert = 'INSERT INTO depositor (address,norequests,dailyCount,weeklyCount,firstrequesttime,dailyTime,weeklyTime,validatedtx,unaccountedtx) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)';
-
-    const insertVals = [address,1,0,0,now,now,now,"",0];
-    await pool.query(insert,insertVals);
-}
-
-async function checkDailyLimit(address){
-    //If daily count exists and 24hours between now and daily time has passed reset to daily count to 0 and daily time to now
-    const select = "select dailycount from depositor where address= '$1';"
-    const values = [address]
-    const result = await pool.query(select,values);
-    //check time here
-    if (resetDailyCount(address, result.rows[0])){
-        return true;
+    const insert = `
+        INSERT INTO depositortest 
+            (address,norequests,dailyCount,weeklyCount,firstrequesttime,dailyTime,weeklyTime,validatedtx,unaccountedamount,unaccountedtx) 
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9);
+        `
+    const insertVals = [address,1,0,0,now,now,now,"",0,""];
+    var result = await pool.query(insert, insertVals);
+    console.log(result);
+    result = {
+        address: address,
+        norequests: 1,
+        dailycount: 0,
+        weeklycount: 0,
+        firstrequesttime: now,
+        dailytime: now,
+        weeklytime: now,
+        validatedTx: "",
+        unaccountedamount: 0,
+        unaccountedamount: ""
     }
-    return result.rows[0].dailycount <= 66;
+    return result;
+}
+
+async function checkDailyLimit(addressDetails){
+    const dailycount = await resetDailyCount(addressDetails);
+    console.log(dailycount);
+    return dailycount <= dailyLimit;
 
 }
 
-async function resetDailyCount(address, row){
+async function resetDailyCount(addressDetails){
     const now = new Date();
-    const dailytime = row.dailytime;
+    // console.log(addressDetails);
+    const address = addressDetails.address;
+    const dailytime = addressDetails.dailytime;
     if ((Math.floor(now.getTime()/1000 - Math.floor(dailytime.getTime()/1000))) > 86400){
         //update
-        const update = "update depositor set dailycount=0,dailytime='$1' where address= '$2';"
+        console.log('Resetting...');
+        const update = 'update depositortest set dailycount=0,dailytime=$1 where address= $2 returning dailycount'
         const values = [now,address]
-        await pool.query(update,values);
-        return true; //daily limit has been reset
+        const dailycount = await pool.query(update,values);
+        return dailycount.rows[0].dailycount; //daily limit has been reset
     }
-    return false;
+    return addressDetails.dailycount;
+    
+
 }
 
-async function checkWeeklyLimit(address){
-    const select = "select weeklycount from depositor where address= '$1';"
-    const values = [address]
-    const result = await pool.query(select,values);
-    if (resetWeeklyCount(address, result.rows[0])){
-        return true;
-    }
-    return result.rows[0].weeklycount <= 330
+async function checkWeeklyLimit(addressDetails){
+    const weeklycount = await resetWeeklyCount(addressDetails);
+    return weeklycount <= weeklyLimit;
 }
 
-async function resetWeeklyCount(address, row){
+async function resetWeeklyCount(addressDetails){
     const now = new Date();
-    const weeklytime = row.weeklytime;
+    const address = addressDetails.address;
+    const weeklytime = addressDetails.weeklytime;
+
     if ((Math.floor(now.getTime()/1000 - Math.floor(weeklytime.getTime()/1000))) > 604800){
         //update
-        const update = "update depositor set weeklycount=0,weeklytime='$1' where address= '$2';"
+        const update = 'update depositortest set weeklycount=0,weeklytime=$1 where address= $2 returning weeklycount'
         const values = [now,address]
-        await pool.query(update,values);
-        return true; //weekly limit has been reset
+        const weeklycount = await pool.query(update,values);
+        return weeklycount.rows[0].weeklycount; //weekly limit has been reset
     }
-    return false;
+    return addressDetails.weeklycount;
 }
 
-async function resetNoRequests(address, row){
+async function resetNoRequests(addressDetails){
+    // console.log(addressDetails)
     const now = new Date();
-    const firstrequesttime = row.firstrequesttime;
+    const address = addressDetails.address;
+    const firstrequesttime = addressDetails.firstrequesttime;
     if ((Math.floor(now.getTime()/1000 - Math.floor(firstrequesttime.getTime()/1000))) > 172800){
         //update
-        const update = "update depositor set norequests=0,firstrequesttime='$1' where address= '$2';"
+        const update = 'update depositortest set norequests=0,firstrequesttime=$1 where address= $2 returning norequests'
         const values = [now,address]
-        await pool.query(update,values);
-        return true; //daily limit has been reset
+        const norequests = await pool.query(update,values);
+        return norequests.rows[0].norequests; //daily limit has been reset
     }
-    return false;
+    return addressDetails.norequests;
 }
 
 async function updateCounts(addressDetails,topUpAmount){
     var newDailyCount = addressDetails.dailycount + topUpAmount;
     var newWeeklyCount = addressDetails.weeklycount + topUpAmount;
     
-    const update = "update depositor set dailycount= $1,weeklycount= $2 where address= '$3';";
+    const update = 'update depositortest set dailycount= $1,weeklycount= $2 where address= $3';
     const values = [newDailyCount,newWeeklyCount, addressDetails.address];
     await pool.query(update,values);
 
 }
 async function updateValidatedTx(addressDetails,newValidatedTx){
-    const update = "update depositor set validatedtx= '$1' where address= '$2';";
+    //console.log(addressDetails, newValidatedTx);
+    const update = 'update depositortest set validatedtx=$1 where address=$2 returning address;';
     const values = [newValidatedTx, addressDetails.address]
-    await pool.query(update,values);
+    const result = await pool.query(update,values);
+    //console.log(result);
 }
 
-async function updateUnaccountedTx(addressDetails, newAmount){
-    var newUnaccountedTx = addressDetails.unaccountedtx + newAmount;
-    const update = "update depositor set unaccountedtx= '$1' where address= '$2';";
-    const values = [newUnaccountedTx, addressDetails.address]
-    await pool.query(update,values);
+async function updateUnaccountedTx(addressDetails, newTx, newAmount){
+    var newUnaccountedAmount = addressDetails.unaccountedamount + newAmount;
+    const update = 'update depositortest set unaccountedamount= $1, unaccountedtx= $2  where address=$3';
+    const values = [newUnaccountedTx,newTx, addressDetails.address]
+    const result = await pool.query(update,values);
+    //console.log(result);
+
 }
+
+async function validateTransaction(addressDetails){   // make a column for unaccountedAmount in db
+    let depositedTx = API.checkDeposit(addressDetails);
+    let lastValidatedTx = addressDetails.validatedtx
+    if (depositedTx.length){
+      if (lastValidatedTx){
+        for (let i; i < depositedTx.length; i++){
+          if (depositedTx[i].amount == depositAmount && depositedTx[i].hash != lastValidatedTx){
+            await updateValidatedTx(addressDetails, depositedTx[i].hash);
+            await updateCounts(addressDetails, topUpAmount);
+            //db.commit()
+            return
+          }else if (Number(depositedTx[i].amount) < Number(depositAmount)){
+            await updateUnaccountedTx()
+            addressDetails.unaccountedAmount += Number(depositedTx[i].amount)
+            addressDetails.unaccountedTx = depositedTx[i].hash
+            //db.commit()
+  
+          }else if (Number(depositedTx[i].amount) > Number(depositAmount)){
+            addressDetails.unaccountedAmount += Number(depositAmount) - Number(depositedTx[i].amount)
+            addressDetails.unaccountedTx = depositedTx[i].hash
+            //db.commit()
+          }
+        }
+      }else{
+        for (let i; i < depositedTx.length; i++){
+          if (depositedTx[i].amount == depositAmount && depositedTx[i].hash != last_validated_tx){
+            await updateValidatedTx(addressDetails, depositedTx[i].hash);
+            await updateCounts(addressDetails, topUpAmount);
+            //update time in db
+            return
+          }else if (Number(depositedTx[i].amount) < Number(depositAmount)){
+            addressDetails.unaccountedAmount += Number(depositedTx[i].amount)
+            addressDetails.unaccountedTx = depositedTx[i].hash
+            //db.commit()
+  
+          }else if (Number(depositedTx[i].amount) > Number(depositAmount)){
+            addressDetails.unaccountedAmount += Number(depositAmount) - Number(depositedTx[i].amount)
+            
+            //db.commit()
+          }}
+      }
+      if (addressDetails.unaccountedAmount >= Number(depositAmount)){
+            addressDetails.unaccountedAmount -= Number(depositAmount);
+            //update time in db
+            await updateCounts(addressDetails.unaccountedamount);
+      }
+    }else{
+      return false;
+    }
+  }
 
 //async function deleteAddressAfterWeek(){}
 //validated transaction count conditions
@@ -239,3 +258,4 @@ async function updateUnaccountedTx(addressDetails, newAmount){
 // if it is not in the list use the first index
 
 
+         

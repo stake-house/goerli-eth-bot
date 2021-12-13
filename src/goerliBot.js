@@ -1,9 +1,10 @@
-require('dotenv').config();
+require('dotenv.path').config();
 
 const utils = require('./utils.js');
 const Web3 = require('web3');
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.INFURA_HTTPS_ENDPOINT));
+console.log(process.env.FAUCET_ADDRESS, process.env.FAUCET_PRIVATE_KEY);
 
 
 const DEFAULT_GAS_PRICE = 1500000000000; // 1,500 gwei
@@ -14,6 +15,14 @@ const INELIGIBLE_CUSTOM_CHECKS_MESSAGE = " is ineligible to receive goerli eth. 
 // Implement any custom eligibility requirements here
 const runCustomEligibilityChecks = async (address) => {
   // implement custom checks here
+  const topUpAmount = maxDepositAmount - (await etherscan.getBalance(address));
+  if(topUpAmount < 0 ){
+    return false;
+  }
+  console.log('TopUpAmount');  
+  const result = await db.confirmTransaction(address, topUpAmount/Math.pow(10,18));
+  console.log("Return of confirm transaction: ",result);
+  return false; //result
 
   //check if address has received 66 goeth today already
     //return false
@@ -97,7 +106,7 @@ module.exports = {
 /* Test Zone */
 
 utils.initializeCachedNonce();
-//runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", 0.000001, false);
+runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", 0.000001, true);
 //hello
 //runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", 20, false);
 //Changed signedTransaction chainID from goerli 5 to 97 bsctestnet change back
