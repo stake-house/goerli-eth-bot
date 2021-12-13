@@ -1,28 +1,28 @@
 const axios = require('axios');
 const rateLimit = require('axios-rate-limit');
-require('dotenv').config();
-const { ETHERSCAN_API_KEY, ETHERSCAN_API_URL, FAUCET_ADDRESS } = process.env;
-// console.log(ETHERSCAN_API_KEY,ETHERSCAN_API_URL);
+require('dotenv').config({path: '../.env'})
+const { ETHERSCAN_API_KEY, ETHERSCAN_API_URL, FAUCET_ADDRESS, GOERLI_API_URL } = process.env;
 
 const getBlockNumber = async function(time) {
-    const request = await rateLimit(axios.create(), {maxRequests: 5, perMillisecondss: 1000, maxRPS: 1});
-    const url = `${ETHERSCAN_API_URL}?module=block&action=getblocknobytime&timestamp=${time}&closest=before&apikey=${ETHERSCAN_API_KEY}`;
+    const request = await rateLimit(axios.create(), {maxRequests: 5, perMillisecondss: 1000, maxRPS: 1})
+    const url = `${GOERLI_API_URL}?module=block&action=getblocknobytime&timestamp=${time}&closest=before&apikey=${ETHERSCAN_API_KEY}`
     return (await (request.get(url))).data.result;
    
 }
 const getTransactions = async function (address, fromBlock) {
-    const request = await rateLimit(axios.create(), {maxRequests: 5, perMillisecondss: 1000, maxRPS: 1});
-    const url = `${ETHERSCAN_API_URL}?module=account&action=txlist&address=${address}&startblock=${fromBlock}&endblock=latest&sort=desc&apikey=${ETHERSCAN_API_KEY}`;
-    return (await request.get(url)).data.result;
+    const request = await rateLimit(axios.create(), {maxRequests: 5, perMillisecondss: 1000, maxRPS: 1})
+    const url = `${GOERLI_API_URL}?module=account&action=txlist&address=${address}&startblock=${fromBlock}&endblock=latest&sort=desc&apikey=${ETHERSCAN_API_KEY}`
+    const res = await request.get(url)
+    return res.data.result;
 }
 
 const getBalance = async function (address){
     const request = await rateLimit(axios.create(), {maxRequests: 5, perMillisecondss: 1000, maxRPS: 1});
-    const url = `${ETHERSCAN_API_URL}?module=account&action=balance&address=${address}&tag=latest&apikey=${ETHERSCAN_API_KEY}`;
+    const url = `${GOERLI_API_URL}?module=account&action=balance&address=${address}&tag=latest&apikey=${ETHERSCAN_API_KEY}`;
     return (await request.get(url)).data.result;
 }
 
-modules.export = {
+module.exports = {
     checkDeposit: async function(address) {
         var paidFlag = false;
         var time = new Date();
@@ -33,20 +33,29 @@ modules.export = {
         var depositedTxArray = []
         //const sendAddress = "0x49a00b366cf5de47304a9a28bfb2956e29de3228"
         const tx = await getTransactions(address, fromBlock);
+        console.log(tx);
         if (tx) {
             for (count = 0; count < tx.length; count++){
                 //faucet address shoudld be = 0x00000000219ab540356cBB839Cbe05303d7705Fa
-                if (tx[count].to === FAUCET_ADDRESS && tx[count].value === '32000000000000000000') {
-                    depositedTxArray.push(tx[count].hash);
+                // if (tx[count].to === FAUCET_ADDRESS && tx[count].value === '32000000000000000000') {
+                //     depositedTxArray.push(tx[count].hash);
+                // }
+                if (tx[count].to === FAUCET_ADDRESS.toLowerCase()) {
+                    depositedTxArray.push({hash: tx[count].hash, amount: tx[count].value, timeStamp: tx[count].timeStamp});
                 }
             }
         }
         return depositedTxArray;
 
+    },
+    getBalance: async function (address){
+        const request = await rateLimit(axios.create(), {maxRequests: 5, perMillisecondss: 1000, maxRPS: 1});
+        const url = `${ GOERLI_API_URL }?module=account&action=balance&address=${address}&tag=latest&apikey=${ETHERSCAN_API_KEY}`;
+        return (await request.get(url)).data.result;
     }
 }
 
-
+/*
 const init = async function(){
 
     var time = new Date();
@@ -71,4 +80,4 @@ const init = async function(){
     }
     console.log(depositedTxArray);
 }
-init();
+init();*/

@@ -10,16 +10,17 @@ const pool = new Pool({
 pool.connect();
 
 var time = new Date();
-time.setDate(time.getDate() - 7);
+time.setDate(time.getDate() - 1);
 console.log(time);
 
 
 const update = 'update depositortest set firstrequesttime= $1, dailytime= $1, weeklytime= $1 where address= $2';
-const values = [time,'0x68F5567A65F9684A0f7bFeaF9be1A1575c0F88EF'];
+const values = [time,'0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA'];
 const result = pool.query(update,values);
 pool.end();
 console.log(result);
 
+/*
 async function confirm_transaction(addressDetails){   // make a column for unaccountedAmount in db
     let FAUCET_ADDRESS = ""
     let depositedTx = API.checkDeposit(addressDetails);
@@ -74,4 +75,4 @@ async function confirm_transaction(addressDetails){   // make a column for unacc
     }else{
       return false;
     }
-  }
+  }*/
