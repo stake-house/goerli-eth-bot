@@ -102,7 +102,7 @@ utils.initializeCachedNonce();
 module.exports = {
   name: 'goerliBot',
   description: 'Sends goerli eth to the user.',
-  execute(message, args, amount, runCustomChecks = false) {
+  execute(message, args, amount, runCustomChecks = true) {
     runGoerliFaucet(message, args[1], amount, runCustomChecks);
   }
 } 
@@ -110,7 +110,7 @@ module.exports = {
 /* Test Zone */
 
 utils.initializeCachedNonce();
-runGoerliFaucet(null, "0x68F5567A65F9684A0f7bFeaF9be1A1575c0F88EF", 0.000001, true);
+//runGoerliFaucet(null, "0x68F5567A65F9684A0f7bFeaF9be1A1575c0F88EF", 0.000001, true);
 //hello
 //runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", 20, false);
 //Changed signedTransaction chainID from goerli 5 to 97 bsctestnet change back

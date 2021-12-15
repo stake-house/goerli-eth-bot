@@ -59,7 +59,7 @@ bot.on('message', (message) => {
           break;
         } else {
           // 3rd arg is amount of eth, 4th is whether to run custom checks
-          bot.commands.get('goerliBot').execute(message, args, 1, false);
+          bot.commands.get('goerliBot').execute(message, args, 0.000001, true);
         }
         break;
       }
