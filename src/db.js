@@ -176,8 +176,9 @@ async function updateCounts(addressDetails,topUpAmount){
 }
   
 async function objectRowUpdate(addressDetails){
-      const update = 'update depositortest set validatedtx= $1,unaccountedamount= $2, unaccountedtx= $3 where address=$4';
-      const values = [addressDetails.validatedtx, addressDetails.unaccountedamount, addressDetails.unaccountedtx, addressDetails.address]
+      console.log('Inside object row:', addressDetails);
+      const update = 'update depositortest set validatedtx= $1,unaccountedamount= $2, unaccountedtx= $3, dailycount= $4, weeklycount= $5 where address= $6';
+      const values = [addressDetails.validatedtx, addressDetails.unaccountedamount, addressDetails.unaccountedtx, addressDetails.dailycount, addressDetails.weeklycount, addressDetails.address]
       const result = await pool.query(update, values);
   }
 
@@ -197,13 +198,14 @@ function getUnvalidatedTx(depositedTx, lastValidatedTx){
 
 async function validateTransaction(addressDetails, topUpAmount){   // make a column for unaccountedAmount in db
         let lastValidatedTx = addressDetails.validatedtx;
-        let depositedTx = getUnvalidatedTx(checkDeposit.confirmTransaction(addressDetails), lastValidatedTx); // confirm checkDeposit.confirmTransaction function
+        console.log(addressDetails.address);
+        let depositedTx = getUnvalidatedTx((await checkDeposit(addressDetails.address)), lastValidatedTx); // confirm checkDeposit.confirmTransaction function
         console.log(depositedTx);
         let depositComplete = false;
         if (depositedTx){
           if (lastValidatedTx){
             for (let i = 0; i < depositedTx.length; i++){
-                if ((Number(depositedTx[i].amount) == depositLimit) && (depositedTx[i].hash != lastValidatedTx) && addressDetails.unaccountedamount < Number(depositAmount)){
+                if ((Number(depositedTx[i].amount) == depositAmount) && (depositedTx[i].hash != lastValidatedTx) && addressDetails.unaccountedamount < Number(depositAmount)){
                 depositComplete = true;
                 addressDetails.validatedtx = depositedTx[i].hash;
                 addressDetails.weeklycount += topUpAmount;

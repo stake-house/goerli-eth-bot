@@ -2,7 +2,10 @@
   "name": "rocketpool-goerli-bot",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/colfax23/rocketpool-goerli-bot",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colfax23/rocketpool-goerli-bot.git"
+  },
   "author": "Colfax Selby <colfax.selby@gmail.com>",
   "license": "MIT",
   "dependencies": {
@@ -17,5 +20,12 @@
   },
   "scripts": {
     "start": "node src/main.js"
-  }
+  },
+  "description": "## Configuration",
+  "bugs": {
+    "url": "https://github.com/colfax23/rocketpool-goerli-bot/issues"
+  },
+  "homepage": "https://github.com/colfax23/rocketpool-goerli-bot#readme",
+  "devDependencies": {},
+  "keywords": []
 }

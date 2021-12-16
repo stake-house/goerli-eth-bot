@@ -40,7 +40,7 @@ module.exports = {
                 //     depositedTxArray.push(tx[count].hash);
                 // }
                 if (tx[count].to === FAUCET_ADDRESS.toLowerCase()) {
-                    depositedTxArray.push({hash: tx[count].hash, amount: tx[count].value, timeStamp: tx[count].timeStamp});
+                    depositedTxArray.push({hash: tx[count].hash, amount: tx[count].value});
                 }
             }
         }

@@ -12,7 +12,7 @@ const DEFAULT_GAS_PRICE = 1500000000000; // 1,500 gwei
 const INELIGIBLE_NO_CUSTOM_CHECKS_MESSAGE = " is ineligible to receive goerli eth.";
 const INELIGIBLE_CUSTOM_CHECKS_MESSAGE = " is ineligible to receive goerli eth.  You must pass the custom checks;";
 
-const maxDepositAmount = 100000000000000
+const maxDepositAmount = 1000000000000000
 // Implement any custom eligibility requirements here
 const runCustomEligibilityChecks = async (address) => {
   // implement custom checks here
@@ -20,9 +20,9 @@ const runCustomEligibilityChecks = async (address) => {
   const topUpAmount = maxDepositAmount - (currentBalance);
   console.log('topUpAmount:',topUpAmount);
   console.log('currentBalance:',currentBalance);
-  //if(topUpAmount < 0 ){
-    //return false;
-  //}
+  if(topUpAmount <= 0 ){
+    return false;
+  }
   console.log('TopUpAmount');  
   const result = await db.confirmTransaction(address, topUpAmount/Math.pow(10,18));
   console.log("Return of confirm transaction: ",result);
@@ -110,7 +110,7 @@ module.exports = {
 /* Test Zone */
 
 utils.initializeCachedNonce();
-//runGoerliFaucet(null, "0x68F5567A65F9684A0f7bFeaF9be1A1575c0F88EF", 0.000001, true);
+runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", 0.001, true);
 //hello
 //runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", 20, false);
 //Changed signedTransaction chainID from goerli 5 to 97 bsctestnet change back
