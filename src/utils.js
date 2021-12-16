@@ -3,6 +3,7 @@ require('dotenv').config();
 const fs = require('fs');
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.INFURA_HTTPS_ENDPOINT));
+const Discord = require('discord.js');
 
 // Eth
 exports.getAddressTransactionCount = async (address) => {
@@ -71,7 +72,10 @@ exports.sendGoerliEth = (message, faucetAddress, faucetKey, receiverAddress, amo
       console.log("Sent to " + receiverAddress + " transaction receipt: ", receipt)
 
       if (message) {
-        message.channel.send("Sent " + amount + " goerli ETH to " + receiverAddress + " - please wait a few mins for it to arrive.  Transaction: https://goerli.etherscan.io/tx/" + receipt.transactionHash);
+        let embed = new Discord.MessageEmbed().setDescription("Sent " + amount + " goerli ETH to " + receiverAddress + " - please wait a few minutes for it to arrive.  Transaction: https://goerli.etherscan.io/tx/" + receipt.transactionHash).
+        setTimestamp().setColor(0xff1100).setURL("https://goerli.etherscan.io/tx/" + receipt.transactionHash);
+        message.lineReply(embed);
+//         message.channel.send({embed});
       }
     })
     .catch(err => {
