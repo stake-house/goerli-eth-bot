@@ -1,6 +1,7 @@
 require('dotenv').config({path: '../.env'})
 
 const utils = require('./utils.js');
+const Discord = require('discord.js');
 const etherscan = require('./api.js');
 const db = require('./db.js');
 const Web3 = require('web3');
@@ -37,7 +38,7 @@ const runCustomEligibilityChecks = async (address) => {
       //! return false
   
 
-  return true;
+//   return true;
 }
 
 const receiverIsEligible = async (address, amountRequested, runCustomChecks)  => {
@@ -64,9 +65,11 @@ const runGoerliFaucet = async (message, address, amount, runCustomChecks) => {
     console.log("Faucet does not have enough ETH.");
 
     if (message) {
-      message.channel.send("The Bot does not have enough Goerli ETH.  Please contact the maintainers.");
+      let embed = new Discord.MessageEmbed().setDescription("The Bot does not have enough Goerli ETH.  Please contact the maintainers.").
+      setTimestamp().setColor(0xff1100);
+      message.lineReply(embed);
+//       message.channel.send({embed});
     }
-
     return;
   }
 
@@ -78,7 +81,10 @@ const runGoerliFaucet = async (message, address, amount, runCustomChecks) => {
     console.log(m);
 
     if (message) {
-      message.channel.send(m);
+      let embed = new Discord.MessageEmbed().setDescription(m).
+      setTimestamp().setColor(3447003);
+      message.lineReply(embed);
+//       message.channel.send({embed});
     }
 
     return;
@@ -87,7 +93,10 @@ const runGoerliFaucet = async (message, address, amount, runCustomChecks) => {
   // Good to go - lets send it
   console.log("Checks passed - sending to " +  address);
   if (message) {
-    message.channel.send("Checks passed - sending...");
+    let embed = new Discord.MessageEmbed().setDescription("Checks passed - sending...").
+    setTimestamp().setColor(3447003);
+    message.lineReply(embed);
+//     message.channel.send({embed});
   }
 
   const nonce = utils.getCachedNonce();
