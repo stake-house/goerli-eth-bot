@@ -16,11 +16,11 @@ A discord bot which distributes GoErli Test Token to the members of a server and
 - [SSV.network Custom Checks](#SSV-network-custom-checks)
   - [Code](#code)
     - [.env](#env)
-    - [api.js](#api-js)
-    - [db.js](#db-js)
-    - [goErliBot.js](#goErliBot-js)
-    - [utils.js](#utils-js)
-    - [main.js](#main-js)
+    - [api.js](#api)
+    - [db.js](#db)
+    - [goErliBot.js](#goErliBot)
+    - [utils.js](#utils)
+    - [main.js](#main)
 - [Acknowledgments](#acknowledgments)
 <!-- 	- [Tools Required](#tools-required) -->
 <!-- 	- [Installation](#installation) -->
