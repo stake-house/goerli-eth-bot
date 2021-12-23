@@ -67,7 +67,7 @@ Note: The bot will stay offline until you run the bot's backend
   * `node main.js`
 
 ## Testing
-* take a look at the "Test Zone" at the bottom of `src/goerliBot.js` and write the appropriate function calls for the tests you want to run
+* Take a look at the "Test Zone" at the bottom of `src/goerliBot.js` and write the appropriate function calls for the tests you want to run
     * you can bypass the actual bot here and test the underlying functions
 * `npm install`
 * `node src/goerliBot.js`
