@@ -17,7 +17,7 @@ A discord bot which distributes GoErli Test Token to the members of a server and
   - [Code](#code)
     - [.env](#env)
     - [api.js](#api)
-    - [db.js](#db-js)
+    - [db.js](#dbjs)
     - [goErliBot.js](#goErliBot)
     - [utils.js](#utils)
     - [main.js](#main)
@@ -58,7 +58,7 @@ A discord bot which distributes GoErli Test Token to the members of a server and
 
 Note: The bot will stay offline until you run the bot's backend
 
-## Running the Bot backend
+## Running the Bot Backend
 
 1) Clone this repo
 
@@ -82,7 +82,7 @@ Note: The bot will stay offline until you run the bot's backend
 
 ## SSV Network Custom Checks
 ### Code
-All values are constants and variables are standardized to 10^18.
+All values, constants and variables related to ETH, are standardized to 10^18.
 #### env
 * `FAUCET_ADDRESS`: You have to provide the faucet address here; the address of the wallet holding the goerli eth you will distribute
 * `FAUCET_PRIVATE_KEY`:  You have to provide the faucet private key here; the private key of the wallet holding the goerli eth you will distribute
@@ -103,7 +103,7 @@ All values are constants and variables are standardized to 10^18.
 * `getBalance(address)` helper function returns the current balance of an address
 * `checkDeposit(address)` function returns an array containing all the transactions related to `FAUCET_ADDRESS` in the last 48 hours. The array contains objects which have the structure: `{hash: transactionHash, amount: amountSentToFaucet}`
 
-#### db.js
+#### db
 `db.js` util file for updating and confirming transactions.
 * `depositAmount`: Total ETH user should send to the `FAUCET_ADDRESS`. In our case, `32000000000000000000`.
 * `dailyLimit`: The max daily amount an address can have
