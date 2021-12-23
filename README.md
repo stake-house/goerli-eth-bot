@@ -46,7 +46,7 @@ A discord bot which distributes GoErli Test Token to the members of a server and
 
 2) Authorize the bot and it will appear in your server!
 
-![image source](https://www.writebots.com/discord-bot-token/)
+![image](https://www.writebots.com/discord-bot-token/)
 
 ## Running the bot backend
 
