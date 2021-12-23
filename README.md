@@ -23,8 +23,6 @@ A discord bot which distributes GoErli Test Token to the members of a server and
 
 ## Configuration
 
-### Discord Setup
-
 #### Create Bot Application 
 
 1) Head over to https://discord.com/developers/applications/
@@ -41,11 +39,12 @@ A discord bot which distributes GoErli Test Token to the members of a server and
 
 ![mspaint_2021-07-09_09-35-59](https://user-images.githubusercontent.com/26490734/125041473-16ad3400-e099-11eb-81cc-34c7c4dc9261.png)
 
-4) Add bot to your server 
+#### Adding the Bot to your server
+1) Add the bot to your server 
 
 ![mspaint_2021-07-09_09-39-43](https://user-images.githubusercontent.com/26490734/125041956-9fc46b00-e099-11eb-8732-96442545b3bb.png)
 
-5) Authorize the bot and it will appear in your server!
+2) Authorize the bot and it will appear in your server!
 
 _[image source](https://www.writebots.com/discord-bot-token/)_
 
