@@ -15,12 +15,12 @@ A discord bot which distributes GoErli Test Token to the members of a server and
 - [Testing](#testing)
 - [SSV.network Custom Checks](#SSV-network-custom-checks)
   - [Code](#code)
-   - [.env](#.env)
-    - [api.js](#api.js)
-    - [db.js](#db.js)
-    - [goErliBot.js](#goErliBot.js)
-    - [utils.js](#utils.js)
-    - [main.js](#main.js)
+    - [.env](#env)
+    - [api.js](#api-js)
+    - [db.js](#db-js)
+    - [goErliBot.js](#goErliBot-js)
+    - [utils.js](#utils-js)
+    - [main.js](#main-js)
 - [Acknowledgments](#acknowledgments)
 <!-- 	- [Tools Required](#tools-required) -->
 <!-- 	- [Installation](#installation) -->
@@ -83,7 +83,7 @@ Note: The bot will stay offline until you run the bot's backend
 ## SSV Network Custom Checks
 ### Code
 All values are constants and variables are standardized to 10^18.
-#### .env
+#### env
 * `FAUCET_ADDRESS`: You have to provide the faucet address here; the address of the wallet holding the goerli eth you will distribute
 * `FAUCET_PRIVATE_KEY`:  You have to provide the faucet private key here; the private key of the wallet holding the goerli eth you will distribute
 * `DISCORD_BOT_TOKEN`: Bot token generated [here](#create-bot-application).
