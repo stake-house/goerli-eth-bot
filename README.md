@@ -5,6 +5,7 @@
 ![GitHub forks](https://img.shields.io/github/forks/hamzi15/SSV-goerli-eth-bot?style=social)
 ![Twitter](https://img.shields.io/twitter/follow/abdullahbaig_0?style=social)
 ![LinkedIn](https://img.shields.io/linkedin/abdullah-baig-08983321a?style=social)
+[![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/abdullah-baig-08983321a)
 
 ## Configuration
 
