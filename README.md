@@ -63,8 +63,8 @@ Note: The bot will stay offline until you run the bot's backend
 4) Add discord user id's to the maintainers command if you would like to
 
 5) Run the bot with the following commands
-* `yarn install`
-* `yarn start > logfile.txt`
+* `npm install`
+* `node main.js`
 
 ## Testing
 * `yarn install`
