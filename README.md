@@ -63,13 +63,13 @@ Note: The bot will stay offline until you run the bot's backend
 4) Add discord user id's to the maintainers command if you would like to
 
 5) Run the bot with the following commands
-* `npm install`
-* `node main.js`
+  * `npm install`
+  * `node main.js`
 
 ## Testing
-* `yarn install`
 * take a look at the "Test Zone" at the bottom of `src/goerliBot.js` and write the appropriate function calls for the tests you want to run
     * you can bypass the actual bot here and test the underlying functions
+* `npm install`
 * `node src/goerliBot.js`
 
 ## Acknowledgements
