@@ -46,7 +46,7 @@ A discord bot which distributes GoErli Test Token to the members of a server and
 
 2) Authorize the bot and it will appear in your server!
 
-![image](https://imgur.com/uVGsGJP)
+![image](https://i.imgur.com/uVGsGJP.jpeg)
 
 Note: The bot will stay offline until you run the bot's backend
 
