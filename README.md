@@ -74,7 +74,7 @@ Note: The bot will stay offline until you run the bot's backend
 * `node src/goerliBot.js`
 
 ## Code
-
+All 
 ### api.js
 Util file for dealing with the Etherscan API to fetch latest block and transactions data.
 * `getBlockNumber(time)` helper function uses the Etherescan API to get a specific block by time. This is a helper function for it. Please refer to this [link](https://docs.bscscan.com/api-endpoints/blocks#get-block-number-by-timestamp) to read more about `get-block-number-by-timestamp` get request
@@ -92,7 +92,9 @@ Util file for updating and confirming transactions.
 
 ### goerliBot.js
 Here all the exports in `db.js`, `api.js`, and `utils.js`, come together and then exported to `main.js` file in a single function `runGoerliFaucet(message, address, amount, runCustomChecks)`.
+* `maxDeposit`: You have to set its value. 
 * `runGoerliFaucet(message, address, amount, runCustomChecks)`: Contains several checks to ensure that the address provided by a user is eligible and valid. `message` param is the original sent by the user on Discord. `address` is the address provided by the user. `amount` is the amount requested by the user. `runCustomChecks` bool value to decide if custom checks are to be run or not.
+* 
 
 ### utils.js
 Util file which contains the necessary methods to conduct GoErli ETH transactions.
