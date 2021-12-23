@@ -13,11 +13,11 @@ A discord bot which distributes GoErli Test Token to the members of a server and
   - [Adding the Bot to your server](#adding-the-bot-to-your-server)
 - [Running the bot backend](#running-the-bot-backend)
 - [Testing](#testing)
-- [SSV.network Custom Checks](#SSV-network-custom-checks)
+- [SSV.network Custom Checks](#ssv-network-custom-checks)
   - [Code](#code)
     - [.env](#env)
     - [api.js](#api)
-    - [db.js](#db)
+    - [db.js](#db-js)
     - [goErliBot.js](#goErliBot)
     - [utils.js](#utils)
     - [main.js](#main)
@@ -103,7 +103,7 @@ All values are constants and variables are standardized to 10^18.
 * `getBalance(address)` helper function returns the current balance of an address
 * `checkDeposit(address)` function returns an array containing all the transactions related to `FAUCET_ADDRESS` in the last 48 hours. The array contains objects which have the structure: `{hash: transactionHash, amount: amountSentToFaucet}`
 
-#### db
+#### db.js
 `db.js` util file for updating and confirming transactions.
 * `depositAmount`: Total ETH user should send to the `FAUCET_ADDRESS`. In our case, `32000000000000000000`.
 * `dailyLimit`: The max daily amount an address can have
