@@ -5,6 +5,8 @@
 ![GitHub forks](https://img.shields.io/github/forks/hamzi15/SSV-goerli-eth-bot?style=social)
 ![Twitter](https://img.shields.io/twitter/follow/abdullahbaig_0?style=social)
 
+A discord bot which distributes GoErli Test Token to the members of a server and keeps track of the amount distributed.
+
 ## Configuration
 
 ### Discord Setup
