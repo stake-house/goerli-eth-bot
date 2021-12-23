@@ -9,14 +9,14 @@ A discord bot which distributes GoErli Test Token to the members of a server and
 
 ## Table of Contents
 - [Configuration](#configuration)
-<!-- 	- [Tools Required](#tools-required) -->
-<!-- 	- [Installation](#installation) -->
 - [Running the bot backend](#running-the-bot-backend)
 - [Testing](#testing)
+- [Acknowledgments](#acknowledgments)
+<!-- 	- [Tools Required](#tools-required) -->
+<!-- 	- [Installation](#installation) -->
 <!-- - [Deployment](#deployment) -->
 <!-- - [Authors](#authors) -->
 <!-- - [License](#license) -->
-- [Acknowledgments](#acknowledgments)
 
 
 ## Configuration
