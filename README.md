@@ -7,6 +7,17 @@
 
 A discord bot which distributes GoErli Test Token to the members of a server and keeps track of the amount distributed.
 
+## Table of Contents
+- [Configuration](#configuration)
+	- [Tools Required](#tools-required)
+	- [Installation](#installation)
+- [Running the App](#running-the-app)
+- [Deployment](#deployment)
+- [Authors](#authors)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+
+
 ## Configuration
 
 ### Discord Setup
