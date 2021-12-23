@@ -15,7 +15,7 @@ A discord bot which distributes GoErli Test Token to the members of a server and
 - [Testing](#testing)
 - [SSV.network Custom Checks](#SSV-network-custom-checks)
   - [Code](#code)
-    - [.env](#.env)
+   - [.env](#.env)
     - [api.js](#api.js)
     - [db.js](#db.js)
     - [goErliBot.js](#goErliBot.js)
