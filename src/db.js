@@ -1,6 +1,3 @@
-
-//var depositortest = require('../db/index').depositortest;
-//depositortest.findAll();*
 const { checkDeposit } = require('./api.js');
 const { Pool } = require('pg');
 let pool = new Pool({
@@ -73,7 +70,10 @@ module.exports = {
 }
 
 async function checkAddressExists(address){
-    const select = 'select * from depositortest where address = $1';
+    const select = `
+        SELECT * FROM depositortest 
+        WHERE address = $1
+    `;
     const value = [address]
     const result = await pool.query(select,value);
     return result.rows;
