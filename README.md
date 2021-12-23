@@ -74,13 +74,23 @@ Note: The bot will stay offline until you run the bot's backend
 * `node src/goerliBot.js`
 
 ## Code
+
 ### api.js
+Util file for dealing with the Etherscan API to fetch latest block and transactions data.
 * `getBlockNumber(time)` helper function uses the Etherescan API to get a specific block by time. This is a helper function for it. Please refer to this [link](https://docs.bscscan.com/api-endpoints/blocks#get-block-number-by-timestamp) to read more about `get-block-number-by-timestamp` get request
 * `getTransactions(address, fromBlock)` helper function uses the Etherscan API to get an address's transactions array. `fromBlock` parameter is the starting block. This function will return all the transactions from starting block till now.
 * `getBalance(address)` helper function returns the current balance of an address
 * `checkDeposit(address)` function returns an array containing all the transactions related to `FAUCET_ADDRESS` in the last 48 hours. The array contains objects which have the structure: `{hash: transactionHash, amount: amountSentToFaucet}`
+
 ### db.js
-*
+Util file for updating and confirming transactions.
+* `depositAmount`: The ETH and GoErli ETH limit for each address. In our case, `32000000000000000000`.
+* `dailyLimit`: The max daily amount an address can have
+* `weeklyLimit`: The max weekly amount an address can have
+* `confirmTransaction(addressDetails, topUpAmount)`: It is the main function where all helper functions come together to validate the transactions of a certain address. It deals with several edge cases. `addressDetails` param is stored and fetched from the database via `checkAddressExists(address)`. `topUpAmount` is calculated like so: `maxDepositAmount - currentBalance`, where `maxDepositAmount` is the limit set by us which is `32000000000000000000` in our case and `currentBalance` is the current GoErli GoETH balance of an address. This function is called in `goErliBot.js` file.
+* `validateTransaction(addressDetails, topUpAmount)`: Helper function used by `confirmTransaction` to validate transactions of an address. Returns `true` if validated otherwise `false`. The transactions of a certain address over the last 48 hours, are fetched via `checkDeposit(address)` helper function. `addressDetails` are stored and fetched from the database via `checkAddressExists(address)`. `topUpAmount` is calculated like so: `maxDepositAmount - currentBalance`, where `maxDepositAmount` is the limit set by us which is `32000000000000000000` in our case and `currentBalance` is the current GoErli GoETH balance of an address.
+
+### 
 
 ## Acknowledgements
 
