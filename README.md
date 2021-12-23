@@ -103,10 +103,10 @@ Here all the exports in `db.js`, `api.js`, and `utils.js`, come together and the
 * `runGoerliFaucet(message, address, amount, runCustomChecks)`: Contains several checks to ensure that the address provided by a user is eligible and valid. `message` param is the original message sent by the user on Discord. `address` is the address provided by the user. `amount` is the amount requested by the user. `runCustomChecks` bool value to decide if custom checks are to be run or not.
 
 ### utils.js
-Util file which contains the necessary methods to conduct GoErli ETH transactions.
+Util file containing the necessary methods to conduct GoErli ETH transactions.
 
 ### main.js
-Deals with Discord API via `discord.js` module. Recieves the command of a discord member, processes their request and dispatches the appropriate messages in response.
+Deals with Discord API via `discord.js` module. Recieves the command of a discord member, processes their request and dispatches the appropriate message in response.
 
 ## Acknowledgements
 This bot is forked from [Stake-house/GoErli-Eth-Bot](https://github.com/stake-house/goerli-eth-bot)
