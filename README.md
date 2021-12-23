@@ -9,6 +9,8 @@ A discord bot which distributes GoErli Test Token to the members of a server and
 
 ## Table of Contents
 - [Configuration](#configuration)
+ 	- [Discord Setup](#discord-setup)
+ 	   - [Create Bot Application ](#create-bot-application)
 - [Running the bot backend](#running-the-bot-backend)
 - [Testing](#testing)
 - [Acknowledgments](#acknowledgments)
@@ -23,7 +25,7 @@ A discord bot which distributes GoErli Test Token to the members of a server and
 
 ### Discord Setup
 
-#### Create bot application 
+#### Create Bot Application 
 
 1) Head over to https://discord.com/developers/applications/
 
@@ -71,4 +73,4 @@ _[image source](https://www.writebots.com/discord-bot-token/)_
 
 ## Acknowledgements
 
-This bot is forked from 
+This bot is forked from [Stake-house/GoErli-Eth-Bot](https://github.com/stake-house/goerli-eth-bot)
