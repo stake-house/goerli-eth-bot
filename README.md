@@ -92,7 +92,7 @@ Util file for updating and confirming transactions.
 
 ### goerliBot.js
 Here all the exports in `db.js`, `api.js`, and `utils.js`, come together and then exported to `main.js` file in a single function `runGoerliFaucet(message, address, amount, runCustomChecks)`.
-* `maxDeposit`: You have to set its value. 
+* `maxDeposit`: You have to set its value. It's the max amount `FAUCET_ADDRESS` can send (`32000000000000000000` in our case)
 * `runGoerliFaucet(message, address, amount, runCustomChecks)`: Contains several checks to ensure that the address provided by a user is eligible and valid. `message` param is the original sent by the user on Discord. `address` is the address provided by the user. `amount` is the amount requested by the user. `runCustomChecks` bool value to decide if custom checks are to be run or not.
 * 
 
