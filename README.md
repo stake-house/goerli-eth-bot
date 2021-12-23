@@ -80,7 +80,7 @@ Note: The bot will stay offline until you run the bot's backend
 * `npm install`
 * `node src/goerliBot.js`
 
-## SSV.network Custom Checks
+## SSV Network Custom Checks
 ### Code
 All values are constants and variables are standardized to 10^18.
 #### .env
