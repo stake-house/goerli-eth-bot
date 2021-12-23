@@ -1,4 +1,9 @@
 # Goerli ETH Bot
+![Current Version](https://img.shields.io/badge/version-v1.0-blue)
+![GitHub contributors](https://img.shields.io/github/contributors/kintama48)
+![GitHub stars](https://img.shields.io/github/stars/hamzi15/SSV-goerli-eth-bot?style=social)
+![GitHub forks](https://img.shields.io/github/forks/hamzi15/SSV-goerli-eth-bot?style=social)
+![Twitter Follow](https://img.shields.io/twitter/follow/abdullah.baig416?style=social)
 
 ## Configuration
 
