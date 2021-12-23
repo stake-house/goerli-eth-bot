@@ -12,7 +12,6 @@ A discord bot which distributes GoErli Test Token to the members of a server and
   - [Create Bot Application ](#create-bot-application)
   - [Adding the Bot to your server](#adding-the-bot-to-your-server)
 - [Running the bot backend](#running-the-bot-backend)
-- [Testing](#testing)
 - [SSV.network Custom Checks](#ssv-network-custom-checks)
   - [Code](#code)
     - [.env](#env)
@@ -21,6 +20,7 @@ A discord bot which distributes GoErli Test Token to the members of a server and
     - [goErliBot.js](#goErliBot)
     - [utils.js](#utils)
     - [main.js](#main)
+- [Testing](#testing)
 - [Acknowledgments](#acknowledgments)
 <!-- 	- [Tools Required](#tools-required) -->
 <!-- 	- [Installation](#installation) -->
@@ -74,12 +74,6 @@ Note: The bot will stay offline until you run the bot's backend
   * `npm install`
   * `node main.js`
 
-## Testing
-* Take a look at the "Test Zone" at the bottom of `src/goerliBot.js` and write the appropriate function calls for the tests you want to run
-    * you can bypass the actual bot here and test the underlying functions
-* `npm install`
-* `node src/goerliBot.js`
-
 ## SSV Network Custom Checks
 ### Code
 All values, constants and variables related to ETH, are standardized to 10^18.
@@ -122,6 +116,10 @@ All values, constants and variables related to ETH, are standardized to 10^18.
 
 #### main
 `main.js` file which deals with Discord API via `discord.js` module. Recieves the command of a discord member, processes their request and dispatches the appropriate message in response.
+
+## Testing
+* Take a look at "Test Zone", at the bottom of `src/goerliBot.js` and write the appropriate function calls for the tests you want to run (you can bypass the actual bot here and test the underlying functions)
+* Use `npm install` then `node src/goerliBot.js` to run the tests
 
 ## Acknowledgements
 This bot is forked from [Stake-house/GoErli-Eth-Bot](https://github.com/stake-house/goerli-eth-bot)
