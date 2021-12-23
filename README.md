@@ -9,12 +9,13 @@ A discord bot which distributes GoErli Test Token to the members of a server and
 
 ## Table of Contents
 - [Configuration](#configuration)
-	- [Tools Required](#tools-required)
-	- [Installation](#installation)
-- [Running the App](#running-the-app)
-- [Deployment](#deployment)
-- [Authors](#authors)
-- [License](#license)
+<!-- 	- [Tools Required](#tools-required) -->
+<!-- 	- [Installation](#installation) -->
+- [Running the bot backend](#running-the-bot-backend)
+- [Testing](#testing)
+<!-- - [Deployment](#deployment) -->
+<!-- - [Authors](#authors) -->
+<!-- - [License](#license) -->
 - [Acknowledgments](#acknowledgments)
 
 
@@ -46,15 +47,15 @@ A discord bot which distributes GoErli Test Token to the members of a server and
 
 _[image source](https://www.writebots.com/discord-bot-token/)_
 
-#### Run the bot backend
+## Running the bot backend
 
 1) Clone this repo
 
-2) `cp .env.example .env` and fill out the required variables, including the token from above
+2) `cp .env.example .env` and fill out the required variables, including the bot token from above
 
 3) Implement any custom checks you want your bot to run in the `receiverIsEligible` function in `src/goerliBot.js`
 * If you implement custom checks, make sure to pass in `true` when calling `bot.commands.get('goerliBot').execute(message, args, 1, true);`
-* The bot is currently configured to send 1 goerli eth, and if the address already has 1 it will not send
+* The bot is currently configured to send 33 goerli eth, and if the address already has 33 goerli eth it will not send
 
 4) Add discord user id's to the maintainers command if you would like to
 
@@ -68,6 +69,6 @@ _[image source](https://www.writebots.com/discord-bot-token/)_
     * you can bypass the actual bot here and test the underlying functions
 * `node src/goerliBot.js`
 
-## Contributions
+## Acknowledgements
 
-This started off as the EthStaker goerli bot, and we wanted to make it available for anyone to use.  Please let us know if you have any issues or suggestions for how to make things clearer.  PRs are always welcome too :)
+This bot is forked from 
