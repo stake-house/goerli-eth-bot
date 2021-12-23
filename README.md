@@ -93,12 +93,13 @@ Util file for updating and confirming transactions.
 * `depositAmount`: Total ETH user should send to the `FAUCET_ADDRESS`. In our case, `32000000000000000000`.
 * `dailyLimit`: The max daily amount an address can have
 * `weeklyLimit`: The max weekly amount an address can have
-* `confirmTransaction(addressDetails, topUpAmount)`: It is the main function where all helper functions come together to validate the transactions of a certain address. It deals with several edge cases. `addressDetails` param is stored and fetched from the database via `checkAddressExists(address)`. `topUpAmount` is calculated like so: `maxDepositAmount - currentBalance`, where `maxDepositAmount` is the limit set by us which is `32000000000000000000` in our case and `currentBalance` is the current GoErli GoETH balance of an address. This function is called in `goErliBot.js` file.
-* `validateTransaction(addressDetails, topUpAmount)`: Helper function used by `confirmTransaction` to validate transactions of an address. Returns `true` if validated otherwise `false`. The transactions of a certain address over the last 48 hours, are fetched via `checkDeposit(address)` helper function. `addressDetails` are stored and fetched from the database via `checkAddressExists(address)`. `topUpAmount` is calculated like so: `maxDepositAmount - currentBalance`, where `maxDepositAmount` is the limit set by us which is `32000000000000000000` in our case and `currentBalance` is the current GoErli GoETH balance of an address.
+* `confirmTransaction(addressDetails, topUpAmount)`: It is the main function where all helper functions come together to validate the transactions of a certain address. It deals with several edge cases. `addressDetails` param is stored and fetched from the database via `checkAddressExists(address)`.
+* `validateTransaction(addressDetails, topUpAmount)`: Helper function used by `confirmTransaction` to validate transactions of an address. Returns `true` if validated otherwise `false`. The transactions of a certain address over the last 48 hours, are fetched via `checkDeposit(address)` helper function.
 
 ### goerliBot.js
 Here all the exports in `db.js`, `api.js`, and `utils.js`, come together and then exported to `main.js` file in a single function `runGoerliFaucet(message, address, amount, runCustomChecks)`.
-* `maxDeposit`: You have to set its value. It's the max amount `FAUCET_ADDRESS` can send (`32000000000000000000` in our case)
+* `maxDepositAmount`: You have to set its value. It's the max amount `FAUCET_ADDRESS` can send (`32000000000000000000` in our case)
+* `runCustomEligibilityChecks(address)`:  `topUpAmount` is calculated like so: `maxDepositAmount - currentBalance`, where `maxDepositAmount` is the limit set by us which is `32000000000000000000` in our case and `currentBalance` is the current GoErli GoETH balance of an address.
 * `runGoerliFaucet(message, address, amount, runCustomChecks)`: Contains several checks to ensure that the address provided by a user is eligible and valid. `message` param is the original message sent by the user on Discord. `address` is the address provided by the user. `amount` is the amount requested by the user. `runCustomChecks` bool value to decide if custom checks are to be run or not.
 
 ### utils.js
