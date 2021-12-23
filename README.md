@@ -13,6 +13,7 @@ A discord bot which distributes GoErli Test Token to the members of a server and
   - [Adding the Bot to your server](#adding-the-bot-to-your-server)
 - [Running the bot backend](#running-the-bot-backend)
 - [Testing](#testing)
+- [Code](#code)
 - [Acknowledgments](#acknowledgments)
 <!-- 	- [Tools Required](#tools-required) -->
 <!-- 	- [Installation](#installation) -->
@@ -71,6 +72,15 @@ Note: The bot will stay offline until you run the bot's backend
     * you can bypass the actual bot here and test the underlying functions
 * `npm install`
 * `node src/goerliBot.js`
+
+## Code
+- api.js
+* `getBlockNumber(time)` helper function uses the Etherescan API to get a specific block by time. This is a helper function for it. Please refer to this [link](https://docs.bscscan.com/api-endpoints/blocks#get-block-number-by-timestamp) to read more about `get-block-number-by-timestamp` get request
+* `getTransactions(address, fromBlock)` helper function uses the Etherscan API to get an address's transactions array. `fromBlock` parameter is the starting block. This function will return all the transactions from starting block till now.
+* `getBalance(address)` helper function returns the current balance of an address
+* `checkDeposit(address)` function returns an array containing all the transactions related to `FAUCET_ADDRESS` in the last 48 hours. The array contains objects which have the structure: `{hash: transactionHash, amount: amountSentToFaucet}`
+- db.js
+*
 
 ## Acknowledgements
 
