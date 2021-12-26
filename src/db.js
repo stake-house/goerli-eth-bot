@@ -23,10 +23,11 @@ const createTable = `create table depositortest(
     norequests INT,
     dailyCount INT,
     weeklyCount INT,
+    unaccountedamount FLOAT,
     firstrequesttime TIMESTAMP WITHOUT TIME ZONE,
     dailyTime TIMESTAMP WITHOUT TIME ZONE,
     weeklyTime TIMESTAMP WITHOUT TIME 100000000000000ZONE
-
+    
 )`
 
 const depositAmount = "1000000000000000"; //should be 32000000000000000000
@@ -81,6 +82,7 @@ async function checkAddressExists(address){
 }
 
 async function setDepositor(address){
+    address = String(address)
     const now = new Date();
     const insert = `
         INSERT INTO depositortest 
@@ -115,13 +117,13 @@ async function checkDailyLimit(addressDetails){
 async function resetDailyCount(addressDetails){
     const now = new Date();
     // console.log(addressDetails);
-    const address = addressDetails.address;
+    const address = String(addressDetails.address);
     const dailytime = addressDetails.dailytime;
     if ((Math.floor(now.getTime()/1000 - Math.floor(dailytime.getTime()/1000))) > 86400){
         //update
         console.log('Resetting...');
         const update = 'update depositortest set dailycount=0,dailytime=$1 where address= $2 returning dailycount'
-        const values = [now,address]
+        const values = [now, address]
         const dailycount = await pool.query(update,values);
         return dailycount.rows[0].dailycount; //daily limit has been reset
     }
@@ -137,7 +139,7 @@ async function checkWeeklyLimit(addressDetails){
 
 async function resetWeeklyCount(addressDetails){
     const now = new Date();
-    const address = addressDetails.address;
+    const address = String(addressDetails.address);
     const weeklytime = addressDetails.weeklytime;
 
     if ((Math.floor(now.getTime()/1000 - Math.floor(weeklytime.getTime()/1000))) > 604800){
@@ -153,7 +155,7 @@ async function resetWeeklyCount(addressDetails){
 async function resetNoRequests(addressDetails){
     // console.log(addressDetails)
     const now = new Date();
-    const address = addressDetails.address;
+    const address = String(addressDetails.address);
     const firstrequesttime = addressDetails.firstrequesttime;
     if ((Math.floor(now.getTime()/1000 - Math.floor(firstrequesttime.getTime()/1000))) > 172800){
         //update
@@ -166,11 +168,11 @@ async function resetNoRequests(addressDetails){
 }
 
 async function updateCounts(addressDetails,topUpAmount){
-    var newDailyCount = addressDetails.dailycount + topUpAmount;
-    var newWeeklyCount = addressDetails.weeklycount + topUpAmount;
+    var newDailyCount = Number(addressDetails.dailycount + topUpAmount);
+    var newWeeklyCount = Number(addressDetails.weeklycount + topUpAmount);
     
     const update = 'update depositortest set dailycount= $1,weeklycount= $2 where address= $3';
-    const values = [newDailyCount,newWeeklyCount, addressDetails.address];
+    const values = [newDailyCount,newWeeklyCount, String(addressDetails.address)];
     await pool.query(update,values);
 
 }
@@ -178,7 +180,7 @@ async function updateCounts(addressDetails,topUpAmount){
 async function objectRowUpdate(addressDetails){
       console.log('Inside object row:', addressDetails);
       const update = 'update depositortest set validatedtx= $1,unaccountedamount= $2, unaccountedtx= $3, dailycount= $4, weeklycount= $5 where address= $6';
-      const values = [addressDetails.validatedtx, addressDetails.unaccountedamount, addressDetails.unaccountedtx, addressDetails.dailycount, addressDetails.weeklycount, addressDetails.address]
+      const values = [String(addressDetails.validatedtx), Number(addressDetails.unaccountedamount), String(addressDetails.unaccountedtx), Number(addressDetails.dailycount), Number(addressDetails.weeklycount), String(addressDetails.address)]
       const result = await pool.query(update, values);
   }
 
@@ -253,21 +255,3 @@ async function validateTransaction(addressDetails, topUpAmount){   // make a col
           return false;
       }
   }
-       
-/*
-async function updateValidatedTx(addressDetails,newValidatedTx){
-    //console.log(addressDetails, newValidatedTx);
-    const update = 'update depositortest set validatedtx=$1 where address=$2 returning address;';
-    const values = [newValidatedTx, addressDetails.address]
-    const result = await pool.query(update,values);
-    //console.log(result);
-}
-
-async function updateUnaccountedTx(addressDetails, newTx, newAmount){
-    var newUnaccountedAmount = addressDetails.unaccountedamount + newAmount;
-    const update = 'update depositortest set unaccountedamount= $1, unaccountedtx= $2  where address=$3';
-    const values = [newUnaccountedTx,newTx, addressDetails.address]
-    const result = await pool.query(update,values);
-    //console.log(result);
-
-}*/
