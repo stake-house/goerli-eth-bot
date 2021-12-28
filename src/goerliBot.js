@@ -21,7 +21,9 @@ const runCustomEligibilityChecks = async (address) => {
   const topUpAmount = maxDepositAmount - (currentBalance);
   if(topUpAmount <= 0 ) return false;
 
-  return await db.confirmTransaction(address, topUpAmount/Math.pow(10,18));
+  const res = await db.confirmTransaction(address, topUpAmount/Math.pow(10,18));
+  console.log(res)
+  return false
 
 }
 
