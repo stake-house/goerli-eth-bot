@@ -3,7 +3,7 @@ const rateLimit = require('axios-rate-limit');
 require('dotenv').config({path: '../.env'})
 const { ETHERSCAN_API_KEY, ETHERSCAN_API_URL, FAUCET_ADDRESS, GOERLI_API_URL } = process.env;
 const request = rateLimit(axios.create(), {maxRequests: 5, perMillisecondss: 500})
-
+const maxTries = 3;
 
 const getBlockNumber = async function(time) {
     const url = `${ETHERSCAN_API_URL}?module=block&action=getblocknobytime&timestamp=${time}&closest=before&apikey=${ETHERSCAN_API_KEY}`
