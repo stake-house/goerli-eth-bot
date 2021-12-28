@@ -12,13 +12,14 @@ const DEFAULT_GAS_PRICE = 1500000000000; // 1,500 gwei
 const INELIGIBLE_NO_CUSTOM_CHECKS_MESSAGE = " is ineligible to receive goerli eth.";
 const INELIGIBLE_CUSTOM_CHECKS_MESSAGE = " is ineligible to receive goerli eth.  You must pass the custom checks;";
 
-const maxDepositAmount = 1000000000000000
+const maxDepositAmount = 1000000000000000 
 
 const runCustomEligibilityChecks = async (address) => {
   const currentBalance = await etherscan.getBalance(address);
   if (currentBalance === null) return null;
 
   const topUpAmount = maxDepositAmount - (currentBalance);
+
   if(topUpAmount <= 0 ) return false;
 
   const res = await db.confirmTransaction(address, topUpAmount/Math.pow(10,18));
@@ -28,6 +29,7 @@ const runCustomEligibilityChecks = async (address) => {
 }
 
 const receiverIsEligible = async (address, amountRequested, runCustomChecks)  => {
+  const needsGoerliEth = true;
   if (runCustomChecks) {
     const passedCustomChecks = await runCustomEligibilityChecks(address);
     return needsGoerliEth && passedCustomChecks;
@@ -103,3 +105,5 @@ module.exports = {
 } 
 
 utils.initializeCachedNonce();
+
+runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", 0.01, true);
