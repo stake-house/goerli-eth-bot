@@ -36,6 +36,15 @@ const createTable = `create table if not exists depositortest
     unaccountedtx     varchar
 );`
 
+pool.query(createTable, (err, res) => {
+    if(err){
+        console.log('depositor table creation failed',err);
+    }
+    else {
+        console.log('depositor table created!');
+    }
+});
+
 const depositAmount = process.env.DEPOSIT_AMOUNT; //should be 32000000000000000000
 const dailyLimit = parseFloat(process.env.DAILY_LIMIT);
 const weeklyLimit = parseFloat(process.env.WEEKLY_LIMIT);
