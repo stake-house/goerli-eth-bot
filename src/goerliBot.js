@@ -125,4 +125,4 @@ module.exports = {
 
 utils.initializeCachedNonce();
 
-runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", true);
+//runGoerliFaucet(null, "0x066Adead2d82A1C2700b4B48ee82ec952b6b18dA", true);
