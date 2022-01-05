@@ -72,9 +72,9 @@ exports.sendGoerliEth = (message, faucetAddress, faucetKey, receiverAddress, amo
       console.log("Sent to " + receiverAddress + " transaction receipt: ", receipt)
 
       if (message) {
-        let embed = new Discord.MessageEmbed().setDescription("Sent " + amount + " goerli ETH to " + receiverAddress + " - please wait a few minutes for it to arrive.  Transaction: https://goerli.etherscan.io/tx/" + receipt.transactionHash).
+        let embed = new Discord.MessageEmbed().setDescription("**Operation Succesful**\nSent " + amount + " goerli ETH to " + receiverAddress + " - please wait a few minutes for it to arrive.  Transaction: https://goerli.etherscan.io/tx/" + receipt.transactionHash).
         setTimestamp().setColor(3447003).setURL("https://goerli.etherscan.io/tx/" + receipt.transactionHash);
-        message.channel.send({embed});
+        message.lineReply(embed);
       }
     })
     .catch(err => {
