@@ -17,7 +17,6 @@ const maxDepositAmount = Number(process.env.MAX_DEPOSIT_AMOUNT)
 const runCustomEligibilityChecks = async (address, topUpAmount) => {
   const res = await db.confirmTransaction(address, topUpAmount/Math.pow(10,18));
   console.log(res)
-  return false
   return res
 
 }
