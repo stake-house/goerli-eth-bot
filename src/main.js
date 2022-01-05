@@ -14,18 +14,15 @@ const EMBEDDED_HELP_MESSAGE = {
     description: "Welcome to the Goerli ETH Faucet.  See below for my commands.",
     fields: [{
         name: "!goerliEth <address>",
-        value: `
-        Sends 1 goerli eth to the address specified.
-        Ex: !goerliEth 0x56d389C4E07A48d429035532402301310B8143A0
-        `
+        value: '`Sends 1 goerli eth to the address specified. \n\nEx: !goerliEth 0x56d389C4E07A48d429035532402301310B8143A0*`'
       },
       {
         name: "!help",
-        value: "Shows this message."
+        value: "`Shows this message.`"
       },
       {
         name: "!mod",
-        value: "Tags the maintainers of this bot, please use if you are experiencing any issues."
+        value: "`Tags the maintainers of this bot, please use if you are experiencing any issues.`"
       }
     ]
   }
@@ -55,12 +52,14 @@ bot.on('message', (message) => {
         console.log('goerliETH called');
         let embed = new Discord.MessageEmbed().setColor(3447003).setTimestamp();
         if (args[1] == null) {
-          embed.setDescription('Goerli ETH address is required.');
-          message.channel.send({embed});
+          embed.setDescription('**Error:** Goerli ETH address is required.');
+//           message.channel.send({embed});
+          message.lineReply(embed);
           break;
         } else if (!web3.utils.isAddress(args[1])) {
-          embed.setDescription('Address is not in the proper format. Please double check.');
-          message.channel.send({embed});
+          embed.setDescription('**Error:**Address is not in the proper format. Please double check.');
+//           message.channel.send({embed});
+          message.lineReply(embed);
           break;
         } else {
           // 3rd arg is amount of eth, 4th is whether to run custom checks
@@ -72,7 +71,8 @@ bot.on('message', (message) => {
       // Other commands
       case 'help': {
         console.log("help called");
-        message.channel.send(EMBEDDED_HELP_MESSAGE);
+//         message.channel.send(EMBEDDED_HELP_MESSAGE);
+        message.lineReply(EMBEDDED_HELP_MESSAGE);
         break;
       }
       
@@ -92,13 +92,13 @@ bot.on('message', (message) => {
       case 'dance': {
         console.log("dance called");
         let embed = new Discord.MessageEmbed().setImage('https://c.tenor.com/fJh-W38iA3oAAAAM/dance-kid.gif').setColor(3447003).setTimestamp();
-        message.channel.send({embed});
+        message.lineReply(embed);
         break;
       }
     }
   } catch (e) {
     console.log(e);
     let embed = new Discord.MessageEmbed().setDescription('Something went wrong. If this continues, please contact the mods of this bot by using command: `!mod`').setColor(0xff1100).setTimestamp();
-    message.channel.send({embed});
+    message.lineReply(embed);
   }
 });
