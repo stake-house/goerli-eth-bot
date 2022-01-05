@@ -40,7 +40,7 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
     if (message) {
       let embed = new Discord.MessageEmbed().setDescription("Something went wrong while getting address details please try again..").
       setTimestamp().setColor(0xff1100);
-      message.lineReply(embed);
+       message.channel.send({embed});
     }
     return;
   };
@@ -53,7 +53,7 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
     if (message) {
       let embed = new Discord.MessageEmbed().setDescription("Address has max deposit amount.").
       setTimestamp().setColor(0xff1100);
-      message.lineReply(embed);
+      message.channel.send({embed});
     }
     return;
   };
@@ -68,7 +68,7 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
     if (message) {
       let embed = new Discord.MessageEmbed().setDescription("The Bot does not have enough Goerli ETH.  Please contact the maintainers.").
       setTimestamp().setColor(0xff1100);
-      message.lineReply(embed);
+      message.channel.send({embed});
     }
     return;
   }
@@ -79,7 +79,7 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
     if (message) {
       let embed = new Discord.MessageEmbed().setDescription(m1).
       setTimestamp().setColor(3447003);
-      message.lineReply(embed);
+      message.channel.send({embed});
     }
 
   }
@@ -93,9 +93,8 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
     if (message) {
       let embed = new Discord.MessageEmbed().setDescription(m).
       setTimestamp().setColor(3447003);
-      message.lineReply(embed);
+      message.channel.send({embed});
     }
-
     return;
   }
 
@@ -103,7 +102,7 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
   if (message) {
     let embed = new Discord.MessageEmbed().setDescription("Checks passed - sending...").
     setTimestamp().setColor(3447003);
-    message.lineReply(embed);
+    message.channel.send({embed});
   }
 
   const nonce = utils.getCachedNonce();
