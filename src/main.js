@@ -6,7 +6,7 @@ require('discord-reply');
 const bot = new Discord.Client();
 const web3 = require('web3');
 
-const COMMAND_PREFIX = '!';
+const COMMAND_PREFIX = '+';
 const EMBEDDED_HELP_MESSAGE = {
   embed: {
     color: 3447003,
@@ -52,6 +52,7 @@ bot.on('message', (message) => {
     switch(args[0]){ 
       // Faucet commands
       case 'goerliEth': {
+        console.log('goerliETH called');
         let embed = new Discord.MessageEmbed().setColor(3447003).setTimestamp();
         if (args[1] == null) {
           embed.setDescription('Goerli ETH address is required.');
@@ -65,7 +66,7 @@ bot.on('message', (message) => {
           break;
         } else {
           // 3rd arg is amount of eth, 4th is whether to run custom checks
-          bot.commands.get('goerliBot').execute(message, args, 0.001, true);
+          bot.commands.get('goerliBot').execute(message, args, true);
         }
         break;
       }
