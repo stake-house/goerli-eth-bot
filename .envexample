@@ -1,0 +1,34 @@
+# Rename this file to .env and fill out the below
+
+# See README.md for more info
+DISCORD_BOT_TOKEN= 
+
+# The address and private key of the wallet holding the goerli eth you will distribute
+FAUCET_ADDRESS= 
+FAUCET_PRIVATE_KEY= 
+
+# Infura HTTPS endpoint from settings on infura.io
+INFURA_HTTPS_ENDPOINT= https://goerli.infura.io/v3/1cc5a78e2e72446880dee3ff4b82cae1
+
+# Full path to nonce file location (file does not need to exist, but folder does)
+NONCE_FILE= Provide a path to an empty .txt file
+
+#API
+ETHERSCAN_API_KEY = Provide an etherscan api key here from https://api.etherscan.io
+ETHERSCAN_API_URL = https://api.etherscan.io/api
+
+GOERLI_API_URL = https://api-goerli.etherscan.io/api
+
+# Database information
+DB_NAME =
+DB_USERNAME = hamzaasaad
+DB_HOST = localhost
+DB_PASS = null
+DB_PORT = 5431
+
+#Limits information
+MAX_DEPOSIT_AMOUNT = Max deposit the faucet can make to the user address (10^18) eg. 1000000000000000
+DAILY_LIMIT = Daily limit deposit limit for each address
+WEEKLY_LIMIT = Weekly deposit limit for each address
+DEPOSIT_AMOUNT = Amount user has to deposit to faucet to be eligible. (10^18) eg.1000000000000000
+

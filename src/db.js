@@ -1,12 +1,14 @@
+require('dotenv').config({path: '../.env'})
 const { checkDeposit } = require('./api.js');
 const { Pool } = require('pg');
+
 let pool = new Pool({
-    user: 'hamzaasaad',
-    host: 'localhost',
-    database: 'hamzaasaad',
-    password: null,
-    port: 5431,
-  })
+  user: process.env.DB_USERNAME,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASS,
+  port: process.env.DB_PORT,
+})
 pool.connect();
 
 pool.query('SELECT NOW()', (err, res) => {
@@ -18,23 +20,25 @@ pool.query('SELECT NOW()', (err, res) => {
     }
   });
 
-const createTable = `create table depositortest(
-    address VARCHAR,
-    norequests INT,
-    dailyCount INT,
-    weeklyCount INT,
-    unaccountedamount FLOAT,
-    firstrequesttime TIMESTAMP WITHOUT TIME ZONE,
-    dailyTime TIMESTAMP WITHOUT TIME ZONE,
-    weeklyTime TIMESTAMP WITHOUT TIME 100000000000000ZONE
-    
-)`
+const createTable = `create table depositortest
+(
+    address           varchar not null
+        constraint depositortest_pk
+            primary key,
+    norequests        integer,
+    dailycount        real,
+    weeklycount       real,
+    firstrequesttime  timestamp,
+    dailytime         timestamp,
+    weeklytime        timestamp,
+    validatedtx       varchar,
+    unaccountedamount real,
+    unaccountedtx     varchar
+);`
 
-const depositAmount = "1000000000000000"; //should be 32000000000000000000
-const dailyLimit = 0.002;
-const weeklyLimit = 0.004;
-
-
+const depositAmount = process.env.DEPOSIT_AMOUNT; //should be 32000000000000000000
+const dailyLimit = parseFloat(process.env.DAILY_LIMIT);
+const weeklyLimit = parseFloat(process.env.WEEKLY_LIMIT);
 
 module.exports = {
     confirmTransaction: async function(address, topUpAmount){
@@ -91,7 +95,6 @@ async function setDepositor(address){
         `
     const insertVals = [address,1,0,0,now,now,now,"",0,""];
     var result = await pool.query(insert, insertVals);
-    console.log(result);
     result = {
         address: address,
         norequests: 1,
@@ -178,7 +181,6 @@ async function updateCounts(addressDetails,topUpAmount){
 }
   
 async function objectRowUpdate(addressDetails){
-      console.log('Inside object row:', addressDetails);
       const update = 'update depositortest set validatedtx= $1,unaccountedamount= $2, unaccountedtx= $3, dailycount= $4, weeklycount= $5 where address= $6';
       const values = [String(addressDetails.validatedtx), Number(addressDetails.unaccountedamount), String(addressDetails.unaccountedtx), Number(addressDetails.dailycount), Number(addressDetails.weeklycount), String(addressDetails.address)]
       const result = await pool.query(update, values);
@@ -200,7 +202,7 @@ function getUnvalidatedTx(depositedTx, lastValidatedTx){
 
 async function validateTransaction(addressDetails, topUpAmount){   // make a column for unaccountedAmount in db
         let lastValidatedTx = addressDetails.validatedtx;
-        console.log(addressDetails.address);
+        //console.log(addressDetails.address);
         let depositedTx = getUnvalidatedTx((await checkDeposit(addressDetails.address)), lastValidatedTx); // confirm checkDeposit.confirmTransaction function
         console.log(depositedTx);
         let depositComplete = false;
