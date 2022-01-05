@@ -56,13 +56,11 @@ bot.on('message', (message) => {
         let embed = new Discord.MessageEmbed().setColor(3447003).setTimestamp();
         if (args[1] == null) {
           embed.setDescription('Goerli ETH address is required.');
-          message.lineReply(embed);
-//           message.channel.send({embed});
+          message.channel.send({embed});
           break;
         } else if (!web3.utils.isAddress(args[1])) {
           embed.setDescription('Address is not in the proper format. Please double check.');
-          message.lineReply(embed);
-//           message.channel.send({embed});
+          message.channel.send({embed});
           break;
         } else {
           // 3rd arg is amount of eth, 4th is whether to run custom checks
@@ -74,8 +72,7 @@ bot.on('message', (message) => {
       // Other commands
       case 'help': {
         console.log("help called");
-        message.lineReply(EMBEDDED_HELP_MESSAGE);
-//         message.channel.send(EMBEDDED_HELP_MESSAGE);
+        message.channel.send(EMBEDDED_HELP_MESSAGE);
         break;
       }
       
@@ -95,15 +92,13 @@ bot.on('message', (message) => {
       case 'dance': {
         console.log("dance called");
         let embed = new Discord.MessageEmbed().setImage('https://c.tenor.com/fJh-W38iA3oAAAAM/dance-kid.gif').setColor(3447003).setTimestamp();
-        message.lineReply(embed);
-//         message.channel.send({embed});
+        message.channel.send({embed});
         break;
       }
     }
   } catch (e) {
     console.log(e);
     let embed = new Discord.MessageEmbed().setDescription('Something went wrong. If this continues, please contact the mods of this bot by using command: `!mod`').setColor(0xff1100).setTimestamp();
-    message.lineReply(embed);
-    //         message.channel.send({embed});
+    message.channel.send({embed});
   }
 });
