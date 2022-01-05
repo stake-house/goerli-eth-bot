@@ -61,7 +61,7 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
   console.log("address " + address + " is requesting " + topUpAmount/Math.pow(10,18) + " goerli eth.  Custom checks: " + runCustomChecks);
 
   // Make sure the bot has enough Goerli ETH to send
-  const faucetReady = await utils.faucetIsReady(process.env.FAUCET_ADDRESS, topUpAmount/Math.pow(10,18));
+  const faucetReady = await utils.faucetIsReady(process.env.FAUCET_ADDRESS, topUpAmount/Math.pow(10,18) + 1500000000000);
   if (!faucetReady) {
     console.log("Faucet does not have enough ETH.");
 
