@@ -39,9 +39,9 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
     console.log("Something went wrong while connecting to API to recieve balance.");
 
     if (message) {
-      let embed = new Discord.MessageEmbed().setDescription("Something went wrong while getting address details please try again..").
+      let embed = new Discord.MessageEmbed().setDescription("**Error:** Something went wrong while getting address details please try again.").
       setTimestamp().setColor(0xff1100);
-       message.channel.send({embed});
+      message.lineReply(embed)
     }
     return;
   };
@@ -52,9 +52,9 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
     console.log("Address has max deposit amount.");
 
     if (message) {
-      let embed = new Discord.MessageEmbed().setDescription("Address has max deposit amount.").
+      let embed = new Discord.MessageEmbed().setDescription("**Operation Unsuccesful**\nAddress has max deposit amount.").
       setTimestamp().setColor(0xff1100);
-      message.channel.send({embed});
+      message.lineReply(embed);
     }
     return;
   };
@@ -67,20 +67,20 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
     console.log("Faucet does not have enough ETH.");
 
     if (message) {
-      let embed = new Discord.MessageEmbed().setDescription("The Bot does not have enough Goerli ETH.  Please contact the maintainers.").
+      let embed = new Discord.MessageEmbed().setDescription("**Operation Unsuccesful**\nThe Bot does not have enough Goerli ETH.  Please contact the maintainers.").
       setTimestamp().setColor(0xff1100);
-      message.channel.send({embed});
+      message.lineReply(embed);
     }
     return;
   }
 
   const receiverEligible = await receiverIsEligible(address, topUpAmount, runCustomChecks);
   if (receiverIsEligible === null){
-    const m1 = 'Something went wrong while confirming your transaction please try again.'
+    const m1 = '**Error:** Something went wrong while confirming your transaction please try again.'
     if (message) {
       let embed = new Discord.MessageEmbed().setDescription(m1).
       setTimestamp().setColor(3447003);
-      message.channel.send({embed});
+      message.lineReply(embed);
     }
 
   }
@@ -94,16 +94,16 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
     if (message) {
       let embed = new Discord.MessageEmbed().setDescription(m).
       setTimestamp().setColor(3447003);
-      message.channel.send({embed});
+      message.lineReply(embed);
     }
     return;
   }
 
   console.log("Checks passed - sending to " +  address);
   if (message) {
-    let embed = new Discord.MessageEmbed().setDescription("Checks passed - sending...").
+    let embed = new Discord.MessageEmbed().setDescription("**Operation Successful**\nChecks passed - sending...").
     setTimestamp().setColor(3447003);
-    message.channel.send({embed});
+    message.lineReply(embed);
   }
 
   const nonce = utils.getCachedNonce();
