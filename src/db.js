@@ -20,10 +20,10 @@ pool.query('SELECT NOW()', (err, res) => {
     }
   });
 
-const createTable = `create table depositortest
+const createTable = `create table if not exists depositortest
 (
     address           varchar not null
-        constraint depositortest_pk
+    constraint depositortest_pk
             primary key,
     norequests        integer,
     dailycount        real,
