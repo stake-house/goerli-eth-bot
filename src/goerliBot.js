@@ -5,6 +5,7 @@ const Discord = require('discord.js');
 const etherscan = require('./api.js');
 const db = require('./db.js');
 const Web3 = require('web3');
+const { max } = require('pg/lib/defaults');
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.INFURA_HTTPS_ENDPOINT));
 
 const DEFAULT_GAS_PRICE = 1500000000000; // 1,500 gwei
@@ -61,7 +62,7 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
   console.log("address " + address + " is requesting " + topUpAmount/Math.pow(10,18) + " goerli eth.  Custom checks: " + runCustomChecks);
 
   // Make sure the bot has enough Goerli ETH to send
-  const faucetReady = await utils.faucetIsReady(process.env.FAUCET_ADDRESS, topUpAmount/Math.pow(10,18) + 1500000000000);
+  const faucetReady = await utils.faucetIsReady(process.env.FAUCET_ADDRESS, (topUpAmount + 1500000000000)/Math.pow(10,18));
   if (!faucetReady) {
     console.log("Faucet does not have enough ETH.");
 
@@ -106,7 +107,7 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
   }
 
   const nonce = utils.getCachedNonce();
-  utils.sendGoerliEth(message, process.env.FAUCET_ADDRESS, process.env.FAUCET_PRIVATE_KEY, address, topUpAmount, nonce, DEFAULT_GAS_PRICE);
+  utils.sendGoerliEth(message, process.env.FAUCET_ADDRESS, process.env.FAUCET_PRIVATE_KEY, address, topUpAmount/Math.pow(10,18), nonce, DEFAULT_GAS_PRICE);
   
   utils.incrementCachedNonce();
 }
