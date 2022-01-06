@@ -6,22 +6,22 @@ require('discord-reply');
 const bot = new Discord.Client();
 const web3 = require('web3');
 
-const COMMAND_PREFIX = '+';
+const COMMAND_PREFIX = '+goerlieth';
 const EMBEDDED_HELP_MESSAGE = {
   embed: {
     color: 3447003,
     title: "Goerli ETH Bot",
     description: "Welcome to the Goerli ETH Faucet.  See below for my commands.",
     fields: [{
-        name: "!goerliEth <address>",
-        value: '`Sends 1 goerli eth to the address specified. \n\nEx: !goerliEth 0x56d389C4E07A48d429035532402301310B8143A0*`'
+        name: "+goerlieth <address>",
+        value: '`Sends 1 goerli eth to the address specified. \n\nEx: +goerliEth 0x56d389C4E07A48d429035532402301310B8143A0*`'
       },
       {
-        name: "!help",
+        name: "+goerlieth help",
         value: "`Shows this message.`"
       },
       {
-        name: "!mod",
+        name: "+goerlieth mod",
         value: "`Tags the maintainers of this bot, please use if you are experiencing any issues.`"
       }
     ]
@@ -45,27 +45,21 @@ bot.on('message', (message) => {
     }
 
     const args = message.content.substring(COMMAND_PREFIX.length).split(" ")
-
-    switch(args[0]){ 
+    
+    if args[1].includes('0x'){
+      if (web3.utils.isAddress(args[1]){
+        bot.commands.get('goerliBot').execute(message, args, true);
+      }else{
+        embed.setDescription('**Error:**Address is not in the proper format. Please double check.');
+        message.lineReply(embed);
+      }
+  }
+    
+    switch(args[1]){ 
       // Faucet commands
-      case 'goerliEth': {
-        console.log('goerliETH called');
-        let embed = new Discord.MessageEmbed().setColor(3447003).setTimestamp();
-        if (args[1] == null) {
-          embed.setDescription('**Error:** Goerli ETH address is required.');
-//           message.channel.send({embed});
-          message.lineReply(embed);
-          break;
-        } else if (!web3.utils.isAddress(args[1])) {
-          embed.setDescription('**Error:**Address is not in the proper format. Please double check.');
-//           message.channel.send({embed});
-          message.lineReply(embed);
-          break;
-        } else {
-          // 3rd arg is amount of eth, 4th is whether to run custom checks
-          bot.commands.get('goerliBot').execute(message, args, true);
-        }
-        break;
+      case 'null': {
+        embed.setDescription('**Error:**Use `+goerlieth help` for the list of commands!')
+        message.lineReply(embed);
       }
 
       // Other commands
@@ -81,10 +75,10 @@ bot.on('message', (message) => {
         console.log("mod called");
         // Uncomment below and add discord ids if you'd like to be tagged
         
-        // let embed = new Discord.MessageEmbed()
-        //     .setDescription('Alerting the maintainers - @!<discord-id> and @!<@discord-id> come check this out.')
-        //     .setColor(3447003).setTimestamp();
-        // message.channel.send({embed});
+        let embed = new Discord.MessageEmbed()
+            .setDescription('**Alerting the Administrators**\n @!<723840404159594496> come check this out!')
+            .setColor(3447003).setTimestamp();
+        message.lineReply(embed);
         break;
       }
 
