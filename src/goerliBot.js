@@ -52,7 +52,7 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
     console.log("Address has max deposit amount.");
 
     if (message) {
-      let embed = new Discord.MessageEmbed().setDescription("**Operation Unsuccesful**\nAddress has max deposit amount.").
+      let embed = new Discord.MessageEmbed().setDescription("**Operation Unsuccessful**\nAddress has max deposit amount.").
       setTimestamp().setColor(0xff1100);
       message.lineReply(embed);
     }
@@ -67,7 +67,7 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
     console.log("Faucet does not have enough ETH.");
 
     if (message) {
-      let embed = new Discord.MessageEmbed().setDescription("**Operation Unsuccesful**\nThe Bot does not have enough Goerli ETH.  Please contact the maintainers.").
+      let embed = new Discord.MessageEmbed().setDescription("**Operation Unsuccessful**\nThe Bot does not have enough Goerli ETH.  Please contact the maintainers.").
       setTimestamp().setColor(0xff1100);
       message.lineReply(embed);
     }
