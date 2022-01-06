@@ -14,7 +14,7 @@ const EMBEDDED_HELP_MESSAGE = {
     description: "Welcome to the Goerli ETH Faucet.  See below for my commands.",
     fields: [{
         name: "+goerlieth <address>",
-        value: '`Sends 1 goerli eth to the address specified. \n\nEx: +goerliEth 0x56d389C4E07A48d429035532402301310B8143A0*`'
+        value: '`Sends up to 32 goerli eth to the address specified. \n\nEx: +goerliEth 0x56d389C4E07A48d429035532402301310B8143A0*`'
       },
       {
         name: "+goerlieth help",
