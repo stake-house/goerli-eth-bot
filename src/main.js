@@ -46,7 +46,7 @@ bot.on('message', (message) => {
 
     const args = message.content.substring(COMMAND_PREFIX.length).split(" ")
     
-    if args[1].includes('0x'){
+    if (args[1].includes('0x')){
       if (web3.utils.isAddress(args[1]){
         bot.commands.get('goerliBot').execute(message, args, true);
       }else{
