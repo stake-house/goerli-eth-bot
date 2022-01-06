@@ -76,7 +76,7 @@ bot.on('message', (message) => {
         // Uncomment below and add discord ids if you'd like to be tagged
         
         let embed = new Discord.MessageEmbed()
-            .setDescription('**Alerting the Administrators**\n @!<723840404159594496> come check this out!')
+            .setDescription('**Alerting the Administrators**\n <@&723840404159594496> come check this out!')
             .setColor(3447003).setTimestamp();
         message.lineReply(embed);
         break;
