@@ -15,25 +15,24 @@ const INELIGIBLE_CUSTOM_CHECKS_MESSAGE = " is ineligible to receive goerli eth. 
 
 const maxDepositAmount = Number(process.env.MAX_DEPOSIT_AMOUNT) 
 
-const runCustomEligibilityChecks = async (address, topUpAmount) => {
-  const res = await db.confirmTransaction(address, topUpAmount/Math.pow(10,18));
-  console.log(res)
+const runCustomEligibilityChecks = async (discordID, address, topUpAmount) => {
+  const res = await db.confirmTransaction(discordID, address, topUpAmount/Math.pow(10,18));
   return res
+  //return false
 
 }
 
-const receiverIsEligible = async (address, amountRequested, runCustomChecks)  => {
-  const needsGoerliEth = true;
-  if (runCustomChecks) {
-    const passedCustomChecks = await runCustomEligibilityChecks(address, amountRequested);
-    return needsGoerliEth && passedCustomChecks;
+const receiverIsEligible = async (discordID, address, amountRequested, runCustomChecks)  => {
+  //const needsGoerliEth = true;
+  if (runCustomChecks === true) {
+    const passedCustomChecks = await runCustomEligibilityChecks(discordID, address, amountRequested);
+    return passedCustomChecks;
   } else {
-    return needsGoerliEth;
+    return true;
   }
 }
 
 const runGoerliFaucet = async (message, address, runCustomChecks) => {
-
   const currentBalance = await etherscan.getBalance(address);
   if (currentBalance === null) {
     console.log("Something went wrong while connecting to API to recieve balance.");
@@ -74,7 +73,7 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
     return;
   }
 
-  const receiverEligible = await receiverIsEligible(address, topUpAmount, runCustomChecks);
+  const receiverEligible = await receiverIsEligible(message.author.id, address, topUpAmount, runCustomChecks);
   if (receiverIsEligible === null){
     const m1 = '**Error:** Something went wrong while confirming your transaction please try again.'
     if (message) {
@@ -83,6 +82,15 @@ const runGoerliFaucet = async (message, address, runCustomChecks) => {
       message.lineReply(embed);
     }
 
+  }
+
+  if (typeof receiverEligible === String){
+    const m1 = receiverEligible
+    if (message) {
+      let embed = new Discord.MessageEmbed().setDescription(m1).
+      setTimestamp().setColor(3447003);
+      message.lineReply(embed);
+    }
   }
 
   if (!receiverEligible) {

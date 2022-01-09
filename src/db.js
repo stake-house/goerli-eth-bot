@@ -9,6 +9,7 @@ let pool = new Pool({
   password: process.env.DB_PASS,
   port: process.env.DB_PORT,
 })
+
 pool.connect();
 
 pool.query('SELECT NOW()', (err, res) => {
@@ -22,9 +23,10 @@ pool.query('SELECT NOW()', (err, res) => {
 
 const createTable = `create table if not exists depositortest
 (
-    address           varchar not null
+    discordid        bigint
     constraint depositortest_pk
             primary key,
+    address           varchar not null,
     norequests        integer,
     dailycount        real,
     weeklycount       real,
@@ -45,66 +47,79 @@ pool.query(createTable, (err, res) => {
     }
 });
 
+
+const maxTries = 3;
 const depositAmount = process.env.DEPOSIT_AMOUNT; //should be 32000000000000000000
 const dailyLimit = parseFloat(process.env.DAILY_LIMIT);
 const weeklyLimit = parseFloat(process.env.WEEKLY_LIMIT);
 
 module.exports = {
-    confirmTransaction: async function(address, topUpAmount){
-        //add try catch
+    confirmTransaction: async function(discordID, address, topUpAmount){
+        var count = 0;
+        while(true) {
+            try {
+                var details = (await checkDiscordIDExists(discordID));
+                //console.log("Check account exists address details:",addressDetails);
+                //Assumes addressDetails will always be an array
+                if (!details.length) {
+                    const details = await setDepositor(discordID, address);
+                    await updateCounts(details, topUpAmount);
+                    return true
+                }
+                //check if addresses match
+                if (address !== details[0].address) {
+                    return "DiscordID is already associated to an address."
+                }
 
-        var addressDetails = (await checkAddressExists(address));
-        //console.log("Check account exists address details:",addressDetails);
-        //Assumes addressDetails will always be an array
-        if (!addressDetails.length){
-            const addressDetails = await setDepositor(address);
-            await updateCounts(addressDetails, topUpAmount);
-            return true
+                details = details[0];
+                //refresh daily limit and weekly limit
+                //check daily limit and weekly limit
+                //If either are reached reject transaction
+                if (!(await checkDailyLimit(details))) {
+                    return false;
+                }
+                if (!(await checkWeeklyLimit(details))) {
+                    return false;
+                }
+                //refresh norequests
+                const norequests = await resetNoRequests(details);
+                if (norequests === 0) {
+                    await updateCounts(details, topUpAmount);
+                    return true
+                }
+                details = (await checkDiscordIDExists(discordID))[0];
+                //noRequests > 1 now we have to validate that the user has sent 32 eth to the wallet
+                return await validateTransaction(details, topUpAmount);
+            } catch (e) {
+                if (++count === maxTries) return null;
+            }
         }
-        addressDetails = addressDetails[0];
-        //refresh daily limit and weekly limit 
-        //check daily limit and weekly limit
-        //If either are reached reject transaction
-        if (!(await checkDailyLimit(addressDetails))){
-            return false;
-        }
-        if (!(await checkWeeklyLimit(addressDetails))){
-            return false;
-        }
-        //refresh norequests
-        const norequests = await resetNoRequests(addressDetails);
-        if (norequests === 0){
-            await updateCounts(addressDetails, topUpAmount);
-            return true
-        } 
-        addressDetails = (await checkAddressExists(address))[0];
-        //noRequests > 1 now we have to validate that the user has sent 32 eth to the wallet
-        return await validateTransaction(addressDetails, topUpAmount);
     },
 }
 
-async function checkAddressExists(address){
+async function checkDiscordIDExists(discordID){
     const select = `
         SELECT * FROM depositortest 
-        WHERE address = $1
+        WHERE discordid = $1
     `;
-    const value = [address]
+    const value = [discordID]
     const result = await pool.query(select,value);
     return result.rows;
 
 }
 
-async function setDepositor(address){
+async function setDepositor(discordID,address){
     address = String(address)
     const now = new Date();
     const insert = `
         INSERT INTO depositortest 
-            (address,norequests,dailyCount,weeklyCount,firstrequesttime,dailyTime,weeklyTime,validatedtx,unaccountedamount,unaccountedtx) 
-            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10);
+            (discordid,address,norequests,dailyCount,weeklyCount,firstrequesttime,dailyTime,weeklyTime,validatedtx,unaccountedamount,unaccountedtx) 
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11);
         `
-    const insertVals = [address,1,0,0,now,now,now,"",0,""];
+    const insertVals = [discordID,address,1,0,0,now,now,now,"",0,""];
     var result = await pool.query(insert, insertVals);
     result = {
+        discordid: discordID,
         address: address,
         norequests: 1,
         dailycount: 0,
