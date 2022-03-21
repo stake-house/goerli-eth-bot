@@ -3,6 +3,7 @@ require('dotenv').config();
 const fs = require('fs');
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.INFURA_HTTPS_ENDPOINT));
+const Discord = require('discord.js');
 
 // Eth
 exports.getAddressTransactionCount = async (address) => {
@@ -54,6 +55,7 @@ exports.setCachedNonce = (nonce) => {
 
 // Sending the goerli ETH
 exports.sendGoerliEth = (message, faucetAddress, faucetKey, receiverAddress, amount, nonce, gasPrice) => {
+  console.log("In sendGoerliETH", faucetAddress, faucetKey, receiverAddress);
   var rawTransaction = {
     "from": faucetAddress, 
     "to": receiverAddress,
@@ -70,7 +72,9 @@ exports.sendGoerliEth = (message, faucetAddress, faucetKey, receiverAddress, amo
       console.log("Sent to " + receiverAddress + " transaction receipt: ", receipt)
 
       if (message) {
-        message.channel.send("Sent " + amount + " goerli ETH to " + receiverAddress + " - please wait a few mins for it to arrive.  Transaction: https://goerli.etherscan.io/tx/" + receipt.transactionHash);
+        let embed = new Discord.MessageEmbed().setDescription("**Operation Successful**\nSent `" + amount + "` goerli ETH to `" + receiverAddress + "` - please wait a few minutes for it to arrive. [Click here, to check the details at etherscan.io.](https://goerli.etherscan.io/tx/)" + receipt.transactionHash).
+        setTimestamp().setColor(3447003); //.setURL("https://goerli.etherscan.io/tx/" + receipt.transactionHash)
+        message.lineReply(embed);
       }
     })
     .catch(err => {
@@ -83,7 +87,7 @@ exports.sendGoerliEth = (message, faucetAddress, faucetKey, receiverAddress, amo
 // Validate faucet
 exports.faucetIsReady = async (faucetAddress, amountRequested) => {
   const faucetBalance = await this.getAddressBalance(faucetAddress);
-
+  console.log("Faucet Balance:",faucetBalance);
   const faucetBalanceNumber = Number(faucetBalance);
   const amountRequestedNumber = Number(amountRequested);
 
